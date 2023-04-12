@@ -60,3 +60,9 @@ NPSearch works like this:
     - This could be added to ease development if the site grows.  
     - Since we are running serverless, I'd like these to be short jobs running in GitHub Actions. I can help and setup pipelines / infra bits.  
     - Backend functions could be Cloudflare workers or AWS Api-Gateway -> Lambda, preferrably workers.  
+
+#### Disclaimer  
+
+All source material within Tibia is made by CipSoft GmbH.  
+I do not own nor did I make any Pictures, books or NPC transcripts and more.   
+This is merely a fan-based site to indulge in Tibia.  
