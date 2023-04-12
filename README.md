@@ -29,6 +29,7 @@ NPSearch works like this:
 
 ## Needs 
 
+- Cleanup of CSS 
 - Reworked Search src/search.js to reduce complexity 
     - Reworked [txt_to_json.py](https://github.com/s2ward/tibia/blob/main/src/txt_to_json.py) to get a better more standard .json structure of [conversations.json](https://github.com/s2ward/tibia/blob/main/api/conversations.json)
 - Better, visually appealing design. These could be your ideas.   
