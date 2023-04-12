@@ -1,0 +1,530 @@
+@font-face {
+  font-family: "Overlock";
+  src: url(Overlock.woff2);
+}
+
+*,
+*:before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Overlock', sans-serif;
+  background-attachment: fixed;
+  width: 100%;
+  margin: 0;
+  background-color: #FFDCAE;
+  min-height: 100vh;
+}
+
+p {
+  font-family: Arial, sans-serif; /* Change to desired font family */
+  font-size: 22px; /* Change to desired font size */
+}
+
+.talesoftibia {
+  margin-top: 15vh;
+  color: #f59b15;
+  text-align: center;
+  font-family: "Times New Roman";
+  font-size: 96px;
+  line-height: auto;
+  margin: 30px auto 0;
+  padding-bottom: 20px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+}
+
+.background-container {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../images/background-image.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+}
+
+.scroll-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  height: auto; /* Change to auto for better responsiveness */
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: rgba(255, 220, 174, 0.4);
+  box-sizing: border-box;
+  border: 2px solid #E5C68B;
+}
+
+.scroll-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  height: auto; /* Change to auto for better responsiveness */
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: rgba(255, 220, 174, 0.4);
+  box-sizing: border-box;
+  border: 2px solid #E5C68B;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 5px;
+  flex-basis: 20%;
+  box-sizing: border-box;
+  height: 180px;
+  width: 160px;
+}
+
+.box img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+.box h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.box p {
+  margin: 0;
+  font-size: 14px;
+  color: #888;
+}
+
+
+
+@media (max-width: 767px) {
+  .box {
+    flex-basis: calc(100% - 20px);
+    width: auto;
+    height: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .box {
+    flex-basis: calc(50% - 20px);
+    width: auto;
+    height: auto;
+  }
+}
+
+.footer-nav {
+  background-color: #333;
+  color: white;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+
+.footer-nav a {
+  display: inline-block;
+  padding: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.footer-nav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.btn-container {
+	padding-top: 5vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn {
+	display: block;
+	width: 300px;
+  height: 50px;
+	margin: 20px auto;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #4CAF50;
+	color: white;
+	text-align: center;
+	font-size: 20px;
+	text-decoration: none;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.btn:hover {
+	background-color: #3e8e41;
+}
+
+nav {
+  background-color: #333;
+  color: white;
+  overflow: hidden;
+  text-align: right;
+  position: relative;
+}
+
+nav a {
+  display: inline-block;
+  padding: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+nav a.left {
+  float: left;
+}
+
+nav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  overflow: hidden;
+  text-align: center;
+  padding: 10px 0;
+}
+
+footer a {
+  display: inline-block;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+footer a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Nav */
+
+/*
+
+nav {
+  background-color: #333;
+  color: white;
+  overflow: hidden;
+  text-align: right;
+}
+
+nav a {
+  display: inline-block;
+  padding: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  float: right;
+}
+
+nav a.left {
+  float: left;
+}
+
+nav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	color: red;
+}
+
+/* Articles */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.article-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.article-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.article {
+  flex-basis: calc(33.33% - 20px);
+  background-color: #f1f1f1;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  margin: 10px;
+  text-align: center;
+  min-height: 10vh;
+  max-height: 5vh;
+}
+
+/* Add a media query for smaller screens (<= 768px) */
+@media (max-width: 768px) {
+  .scroll-box {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .box {
+    flex-basis: 100%; /* Change the basis to 100% for smaller screens */
+    width: 100%;
+    height: auto;
+  }
+
+  .box img {
+    max-width: 100px;
+    max-height: 100px;
+    margin-bottom: 5px;
+  }
+
+  .box iframe {
+    max-width: 100px;
+    max-height: 100px;
+  }
+}
+
+/* Add a media query for medium screens (<= 992px) */
+@media (max-width: 992px) {
+  .scroll-box {
+    justify-content: space-around;
+  }
+
+  .box {
+    flex-basis: 45%; /* Change the basis to 45% for medium screens */
+    width: 45%;
+    height: auto;
+  }
+}
+
+
+/* Search */
+
+.search-container {
+  font-size: 18px;
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+#search-input {
+  width: 50%;
+  padding: 10px;
+  font-size: 22px;
+}
+
+#search-results {
+  width: 80vh;
+  height: 80vh;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
+
+#search-results p {
+  font-size: 20;
+  margin: 4px;
+  line-height: inherit;
+  white-space: pre-wrap;
+}
+
+
+#search-results pre {
+  white-space: pre-wrap;
+}
+
+/* Wiki Libraries */
+
+.wikitable {
+  background-color: #f8f9fa;
+  color: #202122;
+  margin: 1em 0;
+  border: 1px solid #a2a9b1;
+  border-collapse: collapse;
+  margin-right: 20px;
+  position: center;
+}
+
+.centered-table {
+  margin: 0 auto;
+}
+
+table {
+  display: table;
+  border-collapse: separate;
+  box-sizing: border-box;
+  text-indent: initial;
+  border-spacing: 2px;
+  border-color: gray;
+  margin: 0 auto;
+}
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+.ul {
+  background-color: #a2a9b1;
+}
+
+td:first-child {
+  font-weight: bold;
+}
+style attribute {
+  visibility: visible !important;
+}
+
+html {
+  font-size: 100%;
+}
+
+.table-container {
+  display: flex;
+  justify-content: center;
+}
+
+.toc {
+  display: table;
+  padding: 7px;
+}
+.toc, .toccolours {
+  border: 1px solid #a2a9b1;
+  background-color: #f8f9fa;
+  padding: 5px;
+  font-size: 95%;
+}
+
+.mw-content-ltr {
+  direction: ltr;
+}
+.vector-body {
+  font-size: 0.875em;
+  font-size: calc(1em * 0.875);
+  line-height: 1.6;
+}
+.mw-body, .parsoid-body {
+  background-color: #ffffff;
+  color: #202122;
+  direction: ltr;
+  padding: 1em;
+}
+style attribute {
+  visibility: visible !important;
+}
+
+.mermaid { 
+  background-color: white; width: 640px; 
+}
+
+
+/* Responsive rules for smaller screens (mobile) */
+@media screen and (max-width: 767px) {
+  .talesoftibia {
+    font-size: 48px;
+  }
+
+  .box {
+    flex-basis: 100%;
+  }
+
+  .article-container .article {
+    flex-basis: 100%;
+  }
+
+  nav a {
+    display: block;
+    float: none;
+    text-align: center;
+    padding: 10px;
+  }
+
+  #search-input {
+    width: 100%;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  #search-results {
+    width: 100%;
+  }
+}
+
+/* Responsive rules for medium screens (tablets) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .talesoftibia {
+    font-size: 72px;
+  }
+
+  .box {
+    flex-basis: 50%;
+  }
+
+  .article-container .article {
+    flex-basis: 50%;
+  }
+
+  nav a {
+    padding: 10px;
+  }
+
+  #search-input {
+    width: 75%;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  #search-results {
+    width: 100%;
+  }
+}
+
