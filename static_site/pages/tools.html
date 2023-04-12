@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/lunr@2.3.9/lunr.min.js"></script>
+    <meta charset="UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="../styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../styles/style.css">
+    
+
+</head>
+<body>
+
+    <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../pages/articles.html">Articles</a>
+            <a href="../pages/libraries.html">Libraries</a>
+            <a href="../pages/get-started.html">Get Started</a>
+            <a href="../pages/tools.html">NPC Search</a>
+          </div>
+      </nav>
+
+      <div class="main-content">
+    
+    <header class="talesoftibia">NPSearch</header>
+    
+    <div class="background-container"></div>
+    
+    <script>
+        document.getElementById("navbar-container").innerHTML =
+            '<object type="text/html" data="../navbar.html"></object>';
+    </script>
+
+        <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <div id="search-results" style="background-color: rgb(255, 255, 255)"></div>
+    </div>
+</div>
+    <nav class="footer-nav">
+        <footer>
+           <div class="nav-left">
+             <a href="https://www.reddit.com/r/SolvingTibia/" target="_blank">Reddit</a>
+             <a href="https://discord.gg/JRvjSuU99U" target="_blank">Discord</a>
+             <a href="https://github.com/s2ward/tibia" target="_blank">GitHub</a>
+           </div>
+         </footer>
+        </nav>
+
+    <script src="../src/search.js"></script>
+      
+
+</body>
+</html>
+
