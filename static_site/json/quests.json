@@ -1,0 +1,57 @@
+{
+  "quest_list": {
+    "name": "Quest List",
+    "link": "https://www.tibiawiki.com.br/wiki/Quests#Lista_de_Quests",
+    "subcategories": [
+      {
+        "name": "Dawnport quests",
+        "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Dawnport",
+        "level": 2
+      },
+      {
+        "name": "Rookgaard Quests",
+        "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Rookgaard",
+        "level": 2,
+        "subcategories": [
+          {
+            "name": "Rookgaard Trade Quests",
+            "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Trocas_de_Rookgaard",
+            "level": 3
+          },
+          {
+            "name": "Rookgaard Addon Quests",
+            "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Addons_de_Rookgaard",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "name": "mainland quests",
+        "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Mainland",
+        "level": 2,
+        "subcategories": [
+          {
+            "name": "Mainland Trade Quests",
+            "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Trocas_de_Mainland",
+            "level": 3
+          },
+          {
+            "name": "Mainland Outfit Quests",
+            "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Outfits_de_Mainland",
+            "level": 3
+          },
+          {
+            "name": "Mainland Addon Quests",
+            "link": "https://www.tibiawiki.com.br/wiki/Quests#Quests_de_Addons_de_Mainland",
+            "level": 3
+          }
+        ]
+      }
+    ]
+  },
+  "daily_tasks": {
+    "name": "Daily tasks",
+    "link": "https://www.tibiawiki.com.br/wiki/Quests#Tarefas_Diárias",
+    "level": 1
+  }
+}

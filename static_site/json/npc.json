@@ -1,0 +1,41 @@
+{
+  "list": {
+    "name": "NPCs",
+    "links": [
+      {
+        "name": "NPC Lists",
+        "link": "https://tibia.fandom.com/wiki/NPCs#NPC_Lists"
+      },
+      {
+        "name": "NPCs by Geographical location",
+        "link": "https://tibia.fandom.com/wiki/NPCs#NPCs_by_Geographical_location",
+        "sublinks": [
+          {
+            "name": "Exceptions",
+            "link": "https://tibia.fandom.com/wiki/NPCs#Exceptions"
+          },
+          {
+            "name": "Free Account cities",
+            "link": "https://tibia.fandom.com/wiki/NPCs#Free_Account_cities"
+          },
+          {
+            "name": "Free Account villages or remote places",
+            "link": "https://tibia.fandom.com/wiki/NPCs#Free_Account_villages_or_remote_places"
+          },
+          {
+            "name": "Premium Account cities",
+            "link": "https://tibia.fandom.com/wiki/NPCs#Premium_Account_cities"
+          },
+          {
+            "name": "Premium Account villages or remote places",
+            "link": "https://tibia.fandom.com/wiki/NPCs#Premium_Account_villages_or_remote_places"
+          }
+        ]
+      },
+      {
+        "name": "NPCs by Race",
+        "link": "https://tibia.fandom.com/wiki/NPCs#NPCs_by_Race"
+      }
+    ]
+  }
+}

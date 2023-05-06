@@ -1,0 +1,142 @@
+{
+  "city-libraries": [
+    {
+      "name": "Ab'Dendriel Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca(s)_de_Ab%27Dendriel_City"
+    },
+    {
+      "name": "Ankrahmun Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca(s)_de_Ankrahmun_City"
+    },
+    {
+      "name": "Carlin Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Carlin"
+    },
+    {
+      "name": "Darashia Libraries",
+      "link": "https://tibia.fandom.com/wiki/Darashia_Libraries"
+    },
+    {
+      "name": "Dawnport Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Dawnport"
+    },
+    {
+      "name": "Edron Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Edron"
+    },
+    {
+      "name": "Isavi Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Issavi"
+    },
+    {
+      "name": "Kazordoon Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Kazordoon"
+    },
+    {
+      "name": "Port Hope Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Port_Hope"
+    },
+    {
+      "name": "Rathleton Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Rathleton"
+    },
+    {
+      "name": "Rookgaard Library",
+      "link": "https://tibiawiki.com.br/wiki/Academia_de_Rookgaard"
+    },
+    {
+      "name": "Thais Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Thais"
+    },
+    {
+      "name": "Liberty Bay Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Liberty_Bay"
+    },
+    {
+      "name": "Quirefang Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Quirefang"
+    }
+  ],
+  "sub-libraries": [
+    {
+      "name": "Ashta'daramai Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca(s)_de_Ashta%27daramai"
+    },
+    {
+      "name": "Beregar Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Beregar"
+    },
+    {
+      "name": "Darashia Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca(s)_de_Darashia"
+    },
+    {
+      "name": "Dark Cathedral Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Dark_Cathedral"
+    },
+    {
+      "name": "Libraries of Drefia",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca(s)_de_Drefia"
+    },
+    {
+      "name": "Demona Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Demona"
+    },
+    {
+      "name": "Dream Realm Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_do_Dream_Realm"
+    },
+    {
+      "name": "Formorgar Mines library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Formorgar_Mines"
+    },
+    {
+      "name": "Green Claw Swamp Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_do_Green_Claw_Swamp"
+    },
+    {
+      "name": "Hellgate Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca(s)_de_Hellgate"
+    },
+    {
+      "name": "Isle of the Kings Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_da_Isle_of_the_Kings"
+    },
+    {
+      "name": "Desert Dungeon Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_da_Desert_Dungeon"
+    },
+    {
+      "name": "Krimhorn Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Krimhorn"
+    },
+    {
+      "name": "Mal'ouquah Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca(s)_de_Mal%27ouquah"
+    },
+    {
+      "name": "Meriana Libraries",
+      "link": "https://tibiawiki.com.br/wiki/Bibliotecas_de_Meriana"
+    },
+    {
+      "name": "Mintwallin Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Mintwallin"
+    },
+    {
+      "name": "Nargor Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Nargor"
+    },
+    {
+      "name": "Paradox Tower Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_da_Paradox_Tower"
+    },
+    {
+      "name": "Plains of Havoc Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Plains_of_Havoc"
+    },
+    {
+      "name": "Razachai Library",
+      "link": "https://tibiawiki.com.br/wiki/Biblioteca_de_Razachai"
+    }
+  ]
+}

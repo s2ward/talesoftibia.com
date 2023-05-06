@@ -1,0 +1,84 @@
+{
+  "Towns": [
+    {
+      "name": "Dawnport",
+      "link": "https://tibia.fandom.com/wiki/Dawnport"
+    },
+    {
+      "name": "Rookgaard",
+      "link": "https://tibia.fandom.com/wiki/Rookgaard"
+    },
+    {
+      "name": "Free Account Towns",
+      "link": "https://tibia.fandom.com/wiki/Free_Account_Towns",
+      "subtowns": [
+        {
+          "name": "Ab'Dendriel",
+          "link": "https://tibia.fandom.com/wiki/Ab'Dendriel"
+        },
+        {
+          "name": "Carlin",
+          "link": "https://tibia.fandom.com/wiki/Carlin"
+        },
+        {
+          "name": "Kazordoon",
+          "link": "https://tibia.fandom.com/wiki/Kazordoon"
+        },
+        {
+          "name": "Thais",
+          "link": "https://tibia.fandom.com/wiki/Thais"
+        },
+        {
+          "name": "Venore",
+          "link": "https://tibia.fandom.com/wiki/Venore"
+        }
+      ]
+    },
+    {
+      "name": "Premium Account Towns",
+      "link": "https://tibia.fandom.com/wiki/Premium_Account_Towns",
+      "subtowns": [
+        {
+          "name": "Ankrahmun",
+          "link": "https://tibia.fandom.com/wiki/Ankrahmun"
+        },
+        {
+          "name": "Darashia",
+          "link": "https://tibia.fandom.com/wiki/Darashia"
+        },
+        {
+          "name": "Edron",
+          "link": "https://tibia.fandom.com/wiki/Edron"
+        },
+        {
+          "name": "Farmine",
+          "link": "https://tibia.fandom.com/wiki/Farmine"
+        },
+        {
+          "name": "Gray Beach",
+          "link": "https://tibia.fandom.com/wiki/Gray_Beach"
+        },
+        {
+          "name": "Issavi",
+          "link": "https://tibia.fandom.com/wiki/Issavi"
+        },
+        {
+          "name": "Liberty Bay",
+          "link": "https://tibia.fandom.com/wiki/Liberty_Bay"
+        },
+        {
+          "name": "Port Hope",
+          "link": "https://tibia.fandom.com/wiki/Port_Hope"
+        },
+        {
+          "name": "Rathleton",
+          "link": "https://tibia.fandom.com/wiki/Rathleton"
+        },
+        {
+          "name": "Roshamuul",
+          "link": "https://tibia.fandom.com/wiki/Roshamuul"
+        }
+      ]
+    }
+  ]
+}
