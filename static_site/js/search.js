@@ -14,11 +14,12 @@ fetch('https://s2ward.github.io/tibia/api/npc_data.json')
   .then(response => response.json())
   .then(data => {
     npcData = data;
+
+    racesList();
   })
   .catch(error => {
     console.error('Error fetching conversations:', error);
   });
-
 
 $(document).ready(function () {
   const outputDiv = document.getElementById('output');
@@ -26,15 +27,17 @@ $(document).ready(function () {
 
   function searchConversation(query) {
     const queryLower = query.toLowerCase();
+    const npcConversationsMap = new Map();
 
     for (const obj of conversationsData) {
       const filteredConversations = obj.conversation.filter(conv => {
         const { prompt, answer } = conv;
         const { name } = obj;
+        const obj1 = npcData.find(obj1 => obj1.name === obj.name);
 
         const regex1 = new RegExp(`\\b${queryLower}\\b`, "igu");
         if (
-          searchPhraseInPlayerDialogueValue && (
+          (searchPhraseInPlayerDialogueValue && (
             (phraseComparisonValue === 'similar' && prompt.toLowerCase().includes(queryLower)) ||
             (phraseComparisonValue === 'same' && regex1.test(prompt.toLowerCase()))
           ) ||
@@ -44,8 +47,11 @@ $(document).ready(function () {
           ) ||
           searchPhraseInNpcNameValue && (
             (phraseComparisonValue === 'similar' && name.toLowerCase().includes(queryLower)) ||
-            (phraseComparisonValue === 'same' && regex1.test(name.toLowerCase()))
-          )
+            (phraseComparisonValue === 'same' && regex1.test(name.toLowerCase())))
+          ) && 
+          (obj1.race === searchPhraseByRaceValue || searchPhraseByRaceValue === 'All') &&
+          (obj1.location === searchPhraseByLocationValue || searchPhraseByLocationValue === 'All') &&
+          (obj1.job === searchPhraseByJobValue || searchPhraseByJobValue === 'All')
         ) {
           return true;
         }
@@ -55,40 +61,48 @@ $(document).ready(function () {
 
       if (filteredConversations.length === 0) continue;
 
-      for (const conv of filteredConversations) {
-        const npcBoxContentDiv = document.createElement('div');
-        npcBoxContentDiv.classList.add('npcBoxContent', 'clearBoth');
+      if (!npcConversationsMap.has(obj.name)) {
+        npcConversationsMap.set(obj.name, []);
+      }
 
-        const npcImageDiv = document.createElement('div');
-        npcImageDiv.classList.add('npcImage');
-        npcImageDiv.style.backgroundImage = `url(img/npcimg/${obj.name.replace(/ /g, "_")}.png)`;
-        npcImageDiv.addEventListener('click', () => showInformation(obj.name));
+      npcConversationsMap.get(obj.name).push(...filteredConversations);
+    }
 
-        const npcDialogueDiv = document.createElement('div');
-        npcDialogueDiv.classList.add('npcDialogue');
+    npcConversationsMap.forEach((conversations, npcName) => {
+      const npcBoxContentDiv = document.createElement('div');
+      npcBoxContentDiv.classList.add('npcBoxContent', 'clearBoth');
 
+      const npcImageDiv = document.createElement('div');
+      npcImageDiv.classList.add('npcImage');
+      npcImageDiv.style.backgroundImage = `url(img/npcimg/${npcName.replace(/ /g, "_")}.png)`;
+      npcImageDiv.addEventListener('click', () => showInformation(npcName));
+
+      const npcDialogueDiv = document.createElement('div');
+      npcDialogueDiv.classList.add('npcDialogue');
+
+      conversations.forEach(conv => {
         const playerDialogueSpan = document.createElement('span');
         playerDialogueSpan.classList.add('playerDialogueColor');
         playerDialogueSpan.innerText = `Player: ${conv.prompt}`;
 
         npcDialogueDiv.appendChild(playerDialogueSpan);
-        
+
         const regex = new RegExp(`\\b([a-zA-Z0-9'-]*${queryLower}[a-zA-Z0-9'-]*)\\b`, "igu");
 
         conv.answer.forEach(ans => {
           const npcDialogueFormatSpan = document.createElement('span');
           const result = ans.replace(regex, '<span class="npcTargetColor">$1</span>');
           npcDialogueFormatSpan.classList.add('npcDialogueFormat', 'npcDialogueColor');
-          npcDialogueFormatSpan.innerHTML = `${obj.name}: ${result}`;
+          npcDialogueFormatSpan.innerHTML = `${npcName}: ${result}`;
           npcDialogueDiv.appendChild(npcDialogueFormatSpan);
         });
+      });
 
-        npcBoxContentDiv.appendChild(npcImageDiv);
-        npcBoxContentDiv.appendChild(npcDialogueDiv);
+      npcBoxContentDiv.appendChild(npcImageDiv);
+      npcBoxContentDiv.appendChild(npcDialogueDiv);
 
-        outputDiv.appendChild(npcBoxContentDiv);
-      }
-    }
+      outputDiv.appendChild(npcBoxContentDiv);
+    });
   }
 
   function showInformation(npcName) {
@@ -140,10 +154,10 @@ $(document).ready(function () {
 
     const npcLocation = document.createElement('div');
     npcLocation.classList.add('npcLocation');
-
     const npcLocationLink = document.createElement('a');
     npcLocationLink.classList.add('tibiaStyleButtonType1');
     npcLocationLink.href = npc.map;
+    npcLocationLink.target = '_blank';
     npcLocationLink.textContent = 'NPC Location';
 
     npcLocation.appendChild(npcLocationLink);
@@ -154,6 +168,7 @@ $(document).ready(function () {
       const questLink = document.createElement('a');
       questLink.classList.add('tibiaStyleButtonType1');
       questLink.href = quest['quest-url'];
+      questLink.target = '_blank';
       questLink.textContent = quest['quest-name'];
       npcQuests.appendChild(questLink);
     }
@@ -191,6 +206,9 @@ $(document).ready(function () {
   const searchPhraseInNpcNameInput = searchOptionsForm.elements.searchPhraseInNpcName;
   const searchPhraseInNpcDialogueInput = searchOptionsForm.elements.searchPhraseInNpcDialogue;
   const searchPhraseInPlayerDialogueInput = searchOptionsForm.elements.searchPhraseInPlayerDialogue;
+  const searchPhraseByRaceInput = searchOptionsForm.elements.searchPhraseByRace;
+  const searchPhraseByLocationInput = searchOptionsForm.elements.searchPhraseByLocation;
+  const searchPhraseByJobInput = searchOptionsForm.elements.searchPhraseByJob;
 
   let searchPhraseValue = '';
   let autoSearchValue = false;
@@ -198,6 +216,9 @@ $(document).ready(function () {
   let searchPhraseInNpcNameValue = true;
   let searchPhraseInNpcDialogueValue = true;
   let searchPhraseInPlayerDialogueValue = true;
+  let searchPhraseByRaceValue = 'All';
+  let searchPhraseByLocationValue = 'All';
+  let searchPhraseByJobValue = 'All';
 
   function saveFormValues() {
     searchPhraseValue = searchPhraseInput.value;
@@ -210,21 +231,25 @@ $(document).ready(function () {
     searchPhraseInNpcNameValue = searchPhraseInNpcNameInput.checked;
     searchPhraseInNpcDialogueValue = searchPhraseInNpcDialogueInput.checked;
     searchPhraseInPlayerDialogueValue = searchPhraseInPlayerDialogueInput.checked;
+    searchPhraseByRaceValue = searchPhraseByRaceInput.value;
+    searchPhraseByLocationValue = searchPhraseByLocationInput.value;
+    searchPhraseByJobValue = searchPhraseByJobInput.value;
 
-    if (searchPhraseValue.length > 3) {
+    if (searchPhraseValue.length > 2) {
       outputDiv.innerHTML = '';
       searchConversation(searchPhraseValue);
     } else {
       outputDiv.innerHTML = '';
     }
-  /*
     console.log('Search phrase:', searchPhraseValue);
     console.log('Auto search:', autoSearchValue);
     console.log('Phrase comparison:', phraseComparisonValue);
     console.log('Search phrase in NPC name:', searchPhraseInNpcNameValue);
     console.log('Search phrase in NPC dialogue:', searchPhraseInNpcDialogueValue);
     console.log('Search phrase in player dialogue:', searchPhraseInPlayerDialogueValue);
-  */
+    console.log('Search phrase by race:', searchPhraseByRaceValue);
+    console.log('Search phrase by location:', searchPhraseByLocationValue);
+    console.log('Search phrase by job:', searchPhraseByJobValue);
   }
 
   searchOptionsForm.addEventListener('submit', event => {

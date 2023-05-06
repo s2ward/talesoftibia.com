@@ -1,0 +1,67 @@
+{
+  "sections": [
+    {
+      "header": "Articles",
+      "articles": [
+        {
+          "title": "469",
+          "author": "Simula / Cony Island",
+          "image": "img/icon/Bonelord.png",
+          "url": "https://s2ward.github.io/docs/469/1/"
+        },
+        {
+          "title": "Troll Sabotage",
+          "author": "Simula / Cony Island",
+          "image": "img/icon/Troll_Champion.png",
+          "url": "https://www.reddit.com/r/SolvingTibia/comments/v39xz1/the_story_of_chief_grarkharok_new_development_in/"
+        },
+        {
+          "title": "Warlord Sword",
+          "author": "Simula / Cony Island",
+          "image": "img/icon/Warlord_Sword.png",
+          "url": "https://www.reddit.com/r/SolvingTibia/comments/su4q25/the_warlord_sword_and_the_dark_cloaked_man_lore/"
+        },
+        {
+          "title": "Nomad's Land",
+          "author": "Simula / Cony Island",
+          "image": "img/icon/Nomad_Blue.png",
+          "url": "https://www.reddit.com/r/TibiaMMO/comments/rz567y/the_true_sons_of_the_deserts_true_secret_dream/"
+        }
+      ]
+    },
+    {
+      "header": "Videos",
+      "articles": [
+        {
+          "title": "Serpentine Tower",
+          "author": "Simula / Cony Island",
+          "video": "https://www.youtube.com/embed/ITGdVOCUPCA",
+          "url": "https://www.youtube.com/embed/ITGdVOCUPCA"
+        },
+        {
+          "title": "Basilisk & Jakundaf",
+          "author": "Simula / Cony Island",
+          "video": "https://www.youtube.com/embed/qkvkN1xoMgQ",
+          "url": "https://www.youtube.com/embed/qkvkN1xoMgQ"
+        }
+      ]
+    },
+    {
+      "header": "Guides",
+      "articles": [
+        {
+          "title": "469",
+          "author": "Simula / Cony Island",
+          "image": "img/icon/Bonelord.png",
+          "url": "https://s2ward.github.io/docs/469/1/"
+        },
+        {
+          "title": "Lore Introduction",
+          "author": "Simula / Cony Island",
+          "image": "img/icon/Spellbook_of_Ancient_Arcana.png",
+          "url": "https://s2ward.github.io/docs/getting-started/"
+        }
+      ]
+    }
+  ]
+}

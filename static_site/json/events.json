@@ -1,0 +1,141 @@
+{
+  "events": [
+    {
+      "month": "January",
+      "events": [
+        "New Year's Eve",
+        {
+          "name": "The First Dragon",
+          "link": "https://tibiawiki.com.br/wiki/The_First_Dragon_Quest"
+        }
+      ]
+    },
+    {
+      "month": "February",
+      "events": [
+        {
+          "name": "Masquerade Days",
+          "link": "https://tibiawiki.com.br/wiki/Masquerade_Days"
+        },
+        {
+          "name": "Valentine's Day",
+          "link": "https://tibiawiki.com.br/wiki/Valentine%27s_Day"
+        },
+        {
+          "name": "A Piece of Cake",
+          "link": "https://tibiawiki.com.br/wiki/A_Piece_of_Cake"
+        }
+      ]
+    },
+    {
+      "month": "March",
+      "events": [
+        {
+          "name": "The Colors of Magic",
+          "link": "https://tibiawiki.com.br/wiki/The_Colours_of_Magic"
+        },
+        {
+          "name": "Orcsoberfest",
+          "link": "https://tibiawiki.com.br/wiki/Orcsoberfest"
+        }
+      ]
+    },
+    {
+      "month": "April",
+      "events": [
+        "prank month",
+        {
+          "name": "Chylfroest",
+          "link": "https://tibiawiki.com.br/wiki/Chyllfroest"
+        },
+        {
+          "name": "Spring into Life",
+          "link": "https://tibiawiki.com.br/wiki/Spring_Into_Life"
+        }
+      ]
+    },
+    {
+      "month": "May",
+      "events": [
+        {
+          "name": "Demon's Lullaby",
+          "link": "https://tibiawiki.com.br/wiki/Demon%27s_Lullaby"
+        }
+      ]
+    },
+    {
+      "month": "June",
+      "events": [
+        {
+          "name": "Flower Month",
+          "link": "https://tibiawiki.com.br/wiki/Flower_Month"
+        },
+        {
+          "name": "Bewitched",
+          "link": "https://tibiawiki.com.br/wiki/Bewitched"
+        }
+      ]
+    },
+    {
+      "month": "August",
+      "events": [
+        {
+          "name": "Hot Cuisine",
+          "link": "https://tibiawiki.com.br/wiki/Hot_Cuisine_Quest"
+        }
+      ]
+    },
+    {
+      "month": "September",
+      "events": [
+        {
+          "name": "Rise of Devovorga",
+          "link": "https://tibiawiki.com.br/wiki/Rise_of_Devovorga"
+        },
+        {
+          "name": "The Colors of Magic",
+          "link": "https://tibiawiki.com.br/wiki/The_Colours_of_Magic"
+        }
+      ]
+    },
+    {
+      "month": "October",
+      "festivals": [
+        {
+          "name": "Annual Autumn Vintage",
+          "link": "https://tibiawiki.com.br/wiki/Annual_Autumn_Vintage"
+        },
+        {
+          "name": "halloween",
+          "link": "https://tibiawiki.com.br/wiki/Halloween"
+        },
+        {
+          "name": "Orcsoberfest",
+          "link": "https://tibiawiki.com.br/wiki/Orcsoberfest"
+        }
+      ]
+    },
+    {
+      "month": "November",
+      "festivals": [
+        {
+          "name": "The Lightbearer",
+          "link": "https://tibiawiki.com.br/wiki/The_Lightbearer"
+        }
+      ]
+    },
+    {
+      "month": "December",
+      "festivals": [
+        {
+          "name": "christmas",
+          "link": "https://tibiawiki.com.br/wiki/Christmas"
+        },
+        {
+          "name": "Winter Solstice",
+          "link": "https://tibiawiki.com.br/wiki/Winterlight_Solstice"
+        }
+      ]
+    }
+  ]
+}
