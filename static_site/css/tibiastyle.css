@@ -65,15 +65,26 @@ font {
   display: inline;
 }
 
-body {
+html {
+  height: 100%;
   width: 100%;
+}
+
+body {
   background-image: url(../img/background-image.jpg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
+/* -----------------------------*/
+
+/* TOOLS TOOLS TOOLS TOOLS TOOLS TOOLS TOOLS TOOLS */
 .clearBoth::before {
   display: table;
   content: "";
@@ -92,46 +103,181 @@ body {
   user-select: none;
 }
 
-/* Tools */
-.gapAround10Type1 {
-  padding: 1rem 1.3rem 1.3rem 1.3rem;
+.flexRow {
+  display: flex;
+  flex-direction: row;
 }
 
-.gapAround10Type2 {
-  padding: 1rem 1.2rem 1.2rem 1.2rem;
+/* */
+.fullHeight {
+  height: 100%;
 }
 
-.gapAround5 {
+.fullWidth {
+  width: 100%;
+}
+
+.halfHeight {
+  height: 50%;
+}
+
+.halfWidth {
+  width: 50%;
+}
+
+/* */
+.spaceAround5M {
+  margin: 0.5rem;
+}
+
+.spaceAround10M {
+  margin: 1rem;
+}
+
+.spaceAround5P {
   padding: 0.5rem;
 }
 
-.gapAround2 {
-  padding: 0.2rem;
+.spaceAround10P {
+  padding: 1rem;
 }
 
-.bottomDistance10 {
+/* */
+.leftSpace5M {
+  margin-left: 0.5rem;
+}
+
+.leftSpace10M {
+  margin-left: 1rem;
+}
+
+.topSpace5M {
+  margin-top: 0.5rem;
+}
+
+.topSpace10M {
+  margin-top: 1rem;
+}
+
+.rightSpace5M {
+  margin-right: 0.5rem;
+}
+
+.rightSpace10M {
+  margin-right: 1rem;
+}
+
+.bottomSpace5M {
+  margin-bottom: 0.5rem;
+}
+
+.bottomSpace10M {
   margin-bottom: 1rem;
 }
 
-.npSearchLogo {
-  width: 35rem;
-  margin: auto;
+/* */
+.leftSpace5P {
+  padding-left: 0.5rem;
+}
+
+.leftSpace10P {
+  padding-left: 1rem;
+}
+
+.topSpace5P {
+  padding-top: 0.5rem;
+}
+
+.topSpace10P {
+  padding-top: 1rem;
+}
+
+.rightSpace5P {
+  padding-right: 0.5rem;
+}
+
+.rightSpace10P {
+  padding-right: 1rem;
+}
+
+.bottomSpace5P {
+  padding-bottom: 0.5rem;
+}
+
+.bottomSpace10P {
   padding-bottom: 1rem;
 }
 
-.npSearchLogo img {
-  width: 100%;
+/* */
+@media (min-width: 1300px) {
+  .appearsDesktop {
+    display: none !important;
+  }
 }
+
+@media (min-width: 901px) {
+  .appearsMobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .disappearsMobile {
+    display: none;
+  }
+}
+
+/* TIBIA_STYLE TIBIA_STYLE TIBIA_STYLE TIBIA_STYLE  */
+.tibiaStyleBorderHigh1 {
+  border-top: 0.1rem solid rgb(113, 113, 113);
+  border-left: 0.1rem solid rgb(113, 113, 113);
+  border-bottom: 0.1rem solid rgb(37, 37, 37);
+  border-right: 0.1rem solid rgb(37, 37, 37);
+}
+
+.tibiaStyleBorderDeep1 {
+  border-top: 0.1rem solid rgb(37, 37, 37);
+  border-left: 0.1rem solid rgb(37, 37, 37);
+  border-bottom: 0.1rem solid rgb(113, 113, 113);
+  border-right: 0.1rem solid rgb(113, 113, 113);
+}
+
+.tibiaStyleBorderHigh2 {
+  border-top: 0.2rem solid rgb(113, 113, 113);
+  border-left: 0.2rem solid rgb(113, 113, 113);
+  border-bottom: 0.2rem solid rgb(37, 37, 37);
+  border-right: 0.2rem solid rgb(37, 37, 37);
+}
+
+.tibiaStyleBorderDeep2 {
+  border-top: 0.2rem solid rgb(37, 37, 37);
+  border-left: 0.2rem solid rgb(37, 37, 37);
+  border-bottom: 0.2rem solid rgb(113, 113, 113);
+  border-right: 0.2rem solid rgb(113, 113, 113);
+}
+
+/* */
+
+.tibiaStyleBorderBottom {
+  border-bottom: 0.2rem solid rgb(37, 37, 37);
+}
+
+.tibiaStyleBackgroundLight {
+  background-image: url(../img/uiimg/light_tile.png);
+}
+
+.tibiaStyleBackgroundDark {
+  background-image: url(../img/uiimg/dark_tile.png);
+}
+
+/* TOOLS TOOLS TOOLS TOOLS TOOLS TOOLS TOOLS TOOLS */
 
 .navContainer {
   width: 100%;
-  margin-bottom: 1rem;
-  height: 5.6rem;
 }
 
 .navContainer ul {
   float: right;
-  padding: 0.5rem;
 }
 
 .navContainer ul li {
@@ -155,6 +301,14 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+
+.navContainer ul li a:hover {
+  cursor: pointer;
+  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37) inset, -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* -----------------------------*/
 
 
 
@@ -197,8 +351,7 @@ body {
   user-select: none;
 }
 
-
-/* simple styles */
+/* -----------------------------*/
 
 .mainContainer {
   width: 100%;
@@ -206,19 +359,35 @@ body {
 
 .mainContainer .basicContainer {
   width: 100%;
+  height: 100%;
 }
 
 .mainContainer .basicContainer .responsiveContainer {
   margin: auto;
+  height: 100%;
 }
 
 .mainContainer .basicContainer .responsiveContainer .contentsContainer {
   width: 100%;
+  height: 100%;
   padding-left: 1rem;
   padding-right: 1rem;
 }
 
-.windowBox {}
+.mainContainer .basicContainer .responsiveContainer .mainBoxContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.windowBox {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.windowContent {
+  height: 100%;
+}
 
 .scrollWindow {
   width: 100%;
@@ -226,37 +395,14 @@ body {
 
 .scrollWindowContent {
   width: 100%;
-  overflow-y: scroll;
+  height: 100%;
+  overflow-y: auto;
+  position: absolute;
 }
 
 /* Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI Tibia UI */
-.tibiaStyleBackground {
-  background-image: url(../img/uiimg/tile.png);
-}
-
-.tibiaStyleBorderType1 {
-  box-shadow: 0.2rem 0.2rem 0 0 rgb(113, 113, 113) inset,
-    0.3rem 0.3rem 0 0 rgb(54, 54, 54) inset,
-    0.4rem 0.4rem 0 0 rgb(37, 37, 37) inset,
-    -0.2rem -0.2rem 0 0 rgb(37, 37, 37) inset,
-    -0.3rem -0.3rem 0 0 rgb(54, 54, 54) inset,
-    -0.4rem -0.4rem 0 0 rgb(113, 113, 113) inset;
-}
-
-.tibiaStyleBorderType2 {
-  box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
-    -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
-}
-
-.tibiaStyleBorderType3 {
-  box-shadow: 0.2rem 0.2rem 0 0 rgb(113, 113, 113) inset,
-    -0.2rem -0.2rem 0 0 rgb(37, 37, 37) inset;
-}
-
 .tibiaStyleTitleBarType1 {
-  background-image: url(../img/uiimg/tile2.png);
-  box-shadow: 0.1rem 0.1rem 0 0.1rem #717171 inset,
-    -0.1rem -0.1rem 0 0.1rem #252525 inset;
+  background-image: url(../img/uiimg/dark_tile.png);
   text-align: center;
   color: #909090;
   font-size: 1.2rem;
@@ -270,6 +416,7 @@ body {
   user-select: none;
 }
 
+/* -----------------------------*/
 .npcBoxContainer {
   width: 100%;
   padding: 1rem;
@@ -283,31 +430,97 @@ body {
   border-bottom: 0.1rem solid #252525;
 }
 
+.npcBoxContent:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.npcBoxContent:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.npcBoxContent div:last-child {
+  float: left;
+  width: calc(100% - 64px);
+  padding-left: 1rem;
+  line-height: 1.3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04rem;
+}
+
+.npcBoxContent div:first-child {
+  float: left;
+  height: 64px;
+  width: 64px;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37, 0.0) inset, -0.1rem -0.1rem 0 0 rgba(113, 113, 113, 0.0) inset;
+  background-color: rgba(0, 0, 0, 0.0);
+  transition: 0.1s;
+}
+
+.npcBoxContent div:first-child:hover {
+  cursor: pointer;
+  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37) inset, -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
 .npcImage {
   float: left;
   height: 64px;
   width: 64px;
   background-position: center;
   background-repeat: no-repeat;
+  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37, 0.0) inset, -0.1rem -0.1rem 0 0 rgba(113, 113, 113, 0.0) inset;
+  background-color: rgba(0, 0, 0, 0.0);
+  transition: 0.1s;
+}
+
+.npcImage:hover {
+  cursor: pointer;
+  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37) inset, -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .npcDialogue {
   float: left;
   width: calc(100% - 64px);
   padding-left: 1rem;
-  line-height: 1.6rem;
-  font-size: 1.2rem;
+  line-height: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
+  letter-spacing: 0.04rem;
 }
+
+.npcBoxContent div a {
+  color: #9f9ffe;
+}
+
+.npcBoxContent div p {
+  padding-left: 1rem;
+  text-indent: -1rem;
+  color: #5ff7f7;
+  padding-bottom: 0.5rem;
+}
+
+.npcBoxContent div p:last-child {
+  padding-bottom: 0;
+}
+
+.npcBoxContent div p a {
+  color: #1f9ffe;
+  display: inline;
+}
+
 
 .playerDialogueColor {
   color: #9f9ffe;
-  padding-bottom: 0.5rem;
 }
 
 .npcDialogueColor {
   color: #5ff7f7;
-  padding-bottom: 0.5rem;
 }
 
 .npcTargetColor {
@@ -315,21 +528,15 @@ body {
   display: inline;
 }
 
-.npcDialogueColor:last-child {
-  padding-bottom: 0;
-}
-
 .npcDialogueFormat {
   padding-left: 1rem;
   text-indent: -1rem;
 }
 
-.horizontalLineType1 {
-  width: 100%;
-  height: 0.2rem;
-  background: #414141;
-  box-shadow: 0.1rem 0.1rem 0 0 #252525 inset, -0.1rem -0.1rem 0 0 #717171 inset;
-}
+/* --- optimize --- */
+
+
+/* --- optimize --- */
 
 .tibiaStyleInputType1 {
   width: 100%;
@@ -341,7 +548,6 @@ body {
   font-family: Verdana, sans-serif;
   font-weight: 900;
   line-height: 1.2rem;
-  margin-bottom: 1rem;
   box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
     -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
 }
@@ -367,17 +573,13 @@ body {
     0.1em 0 0.08em #000;
 }
 
-.npcInformationContainer {
-  width: 100%;
-  padding: 0 1rem 0 1rem;
-}
+.npcInformationContainer {}
 
 .npcAppearance {
   height: 64px;
   width: 100%;
   background-position: center;
   background-repeat: no-repeat;
-  margin-bottom: 1rem;
 }
 
 .npcName {
@@ -385,12 +587,10 @@ body {
   text-align: center;
   font-size: 1.2rem;
   line-height: 1.2rem;
-  margin-bottom: 1rem;
 }
 
 .npcMonologues {
   width: 100%;
-  margin-bottom: 1rem;
 }
 
 .npcMonologueFormat {
@@ -411,21 +611,13 @@ body {
   padding-bottom: 0;
 }
 
-.npcInformation {
-  width: 100%;
-  margin-bottom: 1rem;
-}
+.npcInformation {}
 
-.npcLocation {
-  width: 100%;
-}
+.npcLocation {}
 
-.npcQuests {
-  width: 100%;
-}
+.npcQuests {}
 
 .tibiaStyleButtonType1 {
-  width: 100%;
   color: #c5c5c5;
   font-size: 1.2rem;
   text-align: center;
@@ -434,7 +626,6 @@ body {
   font-family: Verdana, sans-serif;
   font-weight: 900;
   line-height: 1.2rem;
-  margin-bottom: 1rem;
   box-shadow: 0.1rem 0.1rem 0 0 rgb(113, 113, 113) inset,
     -0.1rem -0.1rem 0 0 rgb(37, 37, 37) inset;
   -webkit-user-select: none;
@@ -445,7 +636,30 @@ body {
 
 .tibiaStyleButtonType1:hover {
   cursor: pointer;
+  box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
+    -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
+  background-image: url(../img/uiimg/dark_tile.png);
 }
+
+
+
+.tibiaStyleButtonType2 {
+  box-shadow: 0.1rem 0.1rem 0 0 rgb(113, 113, 113) inset,
+    -0.1rem -0.1rem 0 0 rgb(37, 37, 37) inset;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.tibiaStyleButtonType2:hover {
+  cursor: pointer;
+  box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
+    -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
+  background-image: url(../img/uiimg/dark_tile.png);
+}
+
+
 
 .tibiaStyleTable {
   display: table;
@@ -505,7 +719,7 @@ body {
   }
 
   .mainContainer .basicContainer .responsiveContainer {
-    width: 120rem;
+    width: 1200px;
   }
 }
 
@@ -515,7 +729,7 @@ body {
   }
 
   .mainContainer .basicContainer .responsiveContainer {
-    width: 120rem;
+    width: 1200px;
   }
 }
 
@@ -526,31 +740,9 @@ body {
 }
 
 @media (min-width: 900px) {
-  .mainInterfaceLayout:first-child {
-    width: 38.2%;
-    float: left;
-    padding-left: 0;
-    padding-right: 0.5rem;
-  }
-
-  .mainInterfaceLayout {
-    width: 61.8%;
-    float: left;
-    padding-left: 0.5rem;
-  }
-
   .navContainer {
     width: 100%;
     margin: auto;
-    margin-bottom: 1rem;
-  }
-
-  .navContainer ul {
-    padding: 0.5rem;
-  }
-
-  .navContainer ul li {
-    padding: 0.5rem;
   }
 
   .navContainer ul li a {
@@ -571,34 +763,85 @@ body {
   }
 }
 
+.mainInterfaceLayout {
+  display: grid;
+  grid-template-areas:
+    'element1 element3'
+    'element2 element3';
+  grid-template-columns: 42rem calc(100% - 43rem);
+  grid-template-rows: auto 1fr;
+  grid-gap: 1rem;
+  height: 100%;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
 @media (max-width: 900px) {
-  .mainInterfaceLayout:first-child {
+  body {
     width: 100%;
-    float: none;
-    padding: 0;
-    margin-bottom: 1rem;
-  }
-
-  .mainInterfaceLayout {
-    width: 100%;
-    float: none;
-    padding: 0;
-  }
-
-  .navContainer {
-    width: 100%;
-    margin: auto;
-    margin-bottom: 1rem;
-    height: auto;
-  }
-
-  .navContainer ul {
-    padding: 0.5rem;
-    width: 100%;
+    background-image: url(../img/uiimg/dark_tile.png);
+    background-size: auto;
+    background-position: center;
+    background-repeat: repeat;
+    background-attachment: fixed;
   }
 
   .navContainer ul li {
+    width: 100%;
     padding: 0.5rem;
+  }
+
+  .mainInterfaceLayout {
+    display: grid;
+    grid-template-areas:
+      'element1'
+      'element3';
+    grid-template-columns: 100%;
+    grid-template-rows: auto 1fr;
+    grid-gap: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
+  .mainContainer .basicContainer .responsiveContainer .contentsContainer {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .navContainer ul {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1300px) {
+  .communities {
+    display: none;
+  }
+}
+
+.mainInterfaceLayout .interfaceItem {}
+
+.mainInterfaceLayout .interfaceItem:nth-child(1) {
+  grid-area: element1;
+  /*align-self: start;*/
+}
+
+.mainInterfaceLayout .interfaceItem:nth-child(2) {
+  grid-area: element2;
+  /*align-self: stretch;
+  display: flex;
+  flex-direction: column;*/
+}
+
+.mainInterfaceLayout .interfaceItem:nth-child(3) {
+  grid-area: element3;
+}
+
+@media (max-width: 900px) {
+  .mainInterfaceLayout .interfaceItem:nth-child(3) {}
+
+  .navContainer {
     width: 100%;
   }
 
@@ -624,7 +867,7 @@ body {
 .scrollWindowContent::-webkit-scrollbar {
   height: 2rem;
   width: 2rem;
-  background-image: url(../img/uiimg/tile2.png);
+  background-image: url(../img/uiimg/dark_tile.png);
   box-shadow: 0.1rem 0 0 0 rgb(113, 113, 113) inset,
     -0.1rem 0 0 0 rgb(37, 37, 37) inset;
   border-radius: 0.5rem;
@@ -859,101 +1102,7 @@ body {
   border-radius: 0.4rem;
 }
 
-.custom-select {
-  position: relative;
-  height: 2.4rem;
-  width: 100%;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  margin-bottom: 0.5rem;
-}
-
-.custom-select select {
-  display: none;
-}
-
-.select-selected {
-  box-shadow: 0.1rem 0.1rem 0 0 rgb(113, 113, 113) inset,
-    -0.1rem -0.1rem 0 0 rgb(37, 37, 37) inset;
-}
-
-.select-selected.select-arrow-active {
-  box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
-    -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
-}
-
-.select-selected:after {
-  position: absolute;
-  content: "";
-  top: 0.9rem;
-  right: 0.6rem;
-  width: 0;
-  height: 0;
-  border: 0.6rem solid transparent;
-  border-color: #717171 transparent transparent transparent;
-}
-
-.select-selected:before {
-  position: absolute;
-  content: "";
-  top: 0;
-  right: 0;
-  width: 2.4rem;
-  height: 2.4rem;
-  box-shadow: 0.1rem 0 0 0 #252525 inset, 0.2rem 0 0 0 #717171 inset;
-}
-
-.select-selected.select-arrow-active:after {
-  border-color: transparent transparent #717171 transparent;
-  top: 0.3rem;
-}
-
-.select-selected.select-arrow-active:before {
-  box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
-    -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
-}
-
-.select-items div,
-.select-selected {
-  cursor: pointer;
-  width: 100%;
-  color: #c5c5c5;
-  font-size: 1.2rem;
-  padding: 0.6rem;
-  padding-left: 1.2rem;
-  font-family: Verdana, sans-serif;
-  font-weight: 900;
-  line-height: 1.2rem;
-  height: 2.4rem;
-}
-
-.select-items {
-  overflow-y: scroll;
-  z-index: 1;
-  box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
-    -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
-  position: absolute;
-  background-image: url(../img/uiimg/tile.png);
-  top: 100%;
-  left: 0;
-  right: 0;
-  max-height: 24rem;
-}
-
-.select-hide {
-  display: none;
-}
-
-.select-items div:hover,
-.same-as-selected {
-  color: #f4f4f4;
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 .tibiaStyleSelect {
-  width: 100%;
   box-shadow: 0.1rem 0.1rem 0 0 rgb(113, 113, 113) inset,
     -0.1rem -0.1rem 0 0 rgb(37, 37, 37) inset;
   cursor: pointer;
@@ -965,7 +1114,6 @@ body {
   font-weight: 900;
   line-height: 1.2rem;
   height: 2.4rem;
-  margin-bottom: 0.5rem;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -976,4 +1124,124 @@ body {
   color: #c5c5c5;
   background-color: #484848;
   font-size: 1.2rem;
+}
+
+.tabContainer {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.tab .tabName {
+  padding-left: 0.6rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  padding-right: 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 10rem;
+}
+
+.tab .closeTab {
+  background-image: url(../img/uiimg/close.svg);
+  background-size: contain;
+  width: 1.8rem;
+  height: 1.8rem;
+  margin: 0.3rem;
+}
+
+.tabContent .tabWindow {
+  display: none;
+}
+
+.tabContent .active {
+  display: block;
+}
+
+.windowTabsContent {
+  width: 100%;
+  padding-left: 2.4rem;
+  flex-wrap: wrap-reverse;
+  display: flex;
+}
+
+.windowTabsContent .tab {
+  color: #c0c0c0;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  border-top: 0.2rem solid #757675;
+  border-left: 0.2rem solid #757675;
+  border-right: 0.2rem solid rgb(37, 37, 37);
+  text-shadow:
+    -0.1rem -0.1rem 0 #000,
+    0.1rem -0.1rem 0 #000,
+    -0.1rem 0.1rem 0 #000,
+    0.1rem 0.1rem 0 #000,
+    -0.1rem -0.1rem 0.1rem #000,
+    0.1rem -0.1rem 0.1rem #000,
+    -0.1rem 0.1rem 0.1rem #000,
+    0.1rem 0.1rem 0.1rem #000;
+  background-image: url(../img/uiimg/dark_tile.png);
+}
+
+.windowTabsContent .tab:hover {
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.windowTabsContent .active {
+  background-image: url(../img/uiimg/light_tile.png);
+  color: #ffffff;
+}
+
+.windowTabsContent .active::after {
+  z-index: 1;
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 0.4rem;
+  left: 0;
+  top: calc(100% - 0.1rem);
+  background-image: url(../img/uiimg/light_tile.png);
+}
+
+
+
+.communities {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  margin-top: -10rem;
+}
+
+.communitiesButton {
+  cursor: pointer;
+  height: 6rem;
+  width: 6rem;
+  background-image: url(../img/uiimg/light_tile.png);
+  box-shadow: 0.1rem 0.1rem 0 0 rgb(113, 113, 113) inset, -0.1rem -0.1rem 0 0 rgb(37, 37, 37) inset;
+  margin-bottom: 1rem;
+}
+
+.reddit {
+  height: 6rem;
+  width: 6rem;
+  background-image: url(../img/reddit.svg);
+  background-size: contain;
+}
+
+.discord {
+  height: 6rem;
+  width: 6rem;
+  background-image: url(../img/discord.svg);
+  background-size: contain;
+}
+
+.github {
+  height: 6rem;
+  width: 6rem;
+  background-image: url(../img/github.svg);
+  background-size: contain;
 }
