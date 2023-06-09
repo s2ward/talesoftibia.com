@@ -2,7 +2,6 @@
   font-family: "Overlock";
   src: url(Overlock.woff2);
 }
-
 .talesoftibia {
   width: 100%;
   color: #f59b15;
@@ -21,6 +20,18 @@
     0.1rem -0.1rem 0.1rem #000,
     -0.1rem 0.1rem 0.1rem #000,
     0.1rem 0.1rem 0.1rem #000;
+}
+@media (min-width: 900px) {
+.talesoftibia {
+  font-size: 8rem;
+  line-height: 6rem;
+}
+}
+@media (max-width: 900px) {
+  .talesoftibia {
+    font-size: 6rem;
+    line-height: 4rem;
+  }
 }
 
 /*------------------------------*/
@@ -144,25 +155,31 @@
 
 /*-------------------------*/
 table {
+  width: 100%;
   display: table;
   border-collapse: separate;
   border-spacing: 0;
   text-indent: initial;
+  word-wrap: break-word;
 }
 
 thead {
+  width: 100%;
   display: table-header-group;
   vertical-align: middle;
   border-color: inherit;
+  word-wrap: break-word;
 }
 
 tbody {
+  width: 100%;
   display: table-row-group;
   vertical-align: middle;
   border-color: inherit;
 }
 
 tr {
+  width: 100%;
   display: table-row;
   vertical-align: inherit;
   border-color: inherit;
@@ -172,6 +189,7 @@ tr:nth-child(even){
 }
 
 th {
+  word-wrap: break-word;
   display: table-cell;
   vertical-align: inherit;
   padding: 1rem;
@@ -181,7 +199,7 @@ th {
   border-bottom: 0.1rem solid #252525;
   border-left: 0.1rem solid #717171;
   border-right: 0.1rem solid #252525;
-  background-image: url(../img/uiimg/tile2.png);
+  background-image: url(../img/uiimg/dark_tile.png);
   font-size: 1.2rem;
   padding: 0.6rem;
   font-family: Verdana, sans-serif;
@@ -189,6 +207,8 @@ th {
   line-height: 1.2rem;
 }
 td {
+  word-wrap: break-word;
+  word-break: break-word;
   display: table-cell;
   vertical-align: inherit;
   padding: 1rem;
@@ -203,6 +223,8 @@ td {
   border-right: 0.1rem solid #252525;
 }
 td a {
+  word-wrap: break-word;
+  word-break: break-word;
   color: #c5c5c5;
   font-size: 1.2rem;
   line-height: 1.6rem;

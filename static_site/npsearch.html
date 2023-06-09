@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>TOT - NPC Search</title>
+
+    <meta charset="UTF-8" />
+    <meta name="description"
+        content="NPC search engine is a tool that is supposed to facilitate the collection and processing of NPC dialogues." />
+    <meta name="robots" content="index, follow" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2, shrink-to-fit=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#252525" />
+    <meta name="author" content="GABRO" />
+    <meta name="designer" content="GABRO" />
+    <meta name="owner" content="Cony Island" />
+    <meta name="url" content="https://www.talesoftibia.com" />
+
+    <link rel="canonical" href="https://www.talesoftibia.com/npsearch.html" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="css/tibiastyle.css" />
+
+    <script type="application/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script type="application/javascript" src="js/generate_menu.js"></script>
+    <script type="application/javascript" src="js/search.js"></script>
+</head>
+
+<body>
+    <header class="mainContainer">
+        <div class="basicContainer">
+            <div class="">
+                <div class="contentsContainer clearBoth">
+                    <nav class="navContainer tibiaStyleBackgroundLight tibiaStyleBorderHigh2 clearBoth">
+                        <div class="flexRow appearsDesktop" style="float: left;">
+                            <a href="https://www.reddit.com/r/SolvingTibia/" target="_blank" class="tibiaStyleButtonType2 spaceAround5M"
+                                style="width: 3.6rem; height: 3.6rem;">
+                                <div
+                                    style="
+                                    width: 100%;
+                                    height: 100%;
+                                    background-image: url(img/reddit.svg);
+                                    background-size: cover;">
+                                </div>
+                            </a>
+
+                            <a href="https://discord.gg/JRvjSuU99U" target="_blank" class="tibiaStyleButtonType2 spaceAround5M"
+                                style="width: 3.6rem; height: 3.6rem;">
+                                <div
+                                style="
+                                width: 100%;
+                                height: 100%;
+                                background-image: url(img/discord.svg);
+                                background-size: cover;">
+                                </div>
+                            </a>
+
+                            <a href="https://github.com/s2ward/tibia" target="_blank" class="tibiaStyleButtonType2 spaceAround5M"
+                                style="width: 3.6rem; height: 3.6rem;">
+                                <div
+                                style="
+                                width: 100%;
+                                height: 100%;
+                                background-image: url(img/github.svg);
+                                background-size: cover;">
+                                </div>
+                            </a>
+                        </div>
+
+                        <div id="menu-button" class="tibiaStyleButtonType2 appearsMobile spaceAround5M"
+                            style="width: 3.6rem; height: 3.6rem; float: right;">
+                            <div
+                                style="width: 3.6rem; height: 3.6rem; background-image: url(img/uiimg/menu.svg); background-size: cover;">
+                            </div>
+                        </div>
+
+                        <ul id="menu" class="clearBoth disappearsMobile">
+                            <li>
+                                <a href="index.html" title="Home">Home</a>
+                            </li>
+
+                            <li>
+                                <a href="articles.html" title="Articles">Articles</a>
+                            </li>
+
+                            <li>
+                                <a href="achievements.html" title="Libraries">Libraries</a>
+                            </li>
+
+                            <li>
+                                <a href="https://magic-web.talesoftibia.com/#32487,31929,7:0" title="Get Started">Magic Web</a>
+                            </li>
+
+                            <li>
+                                <a href="npsearch.html" title="NPC Search">NPSearch</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mainContainer">
+        <div class="basicContainer">
+            <div class="responsiveContainer">
+                <div class="contentsContainer">
+                    <div class="mainBoxContainer">
+                        <div class="mainInterfaceLayout">
+                            <div class="interfaceItem">
+                                <div class="windowBox tibiaStyleBackgroundLight tibiaStyleBorderHigh2">
+                                    <div
+                                        class="windowTitleBar tibiaStyleTitleBarType1 disappearsMobile tibiaStyleBorderBottom tibiaStyleBackgroundDark">
+                                        Search Options
+                                    </div>
+
+                                    <div class="windowContent">
+                                        <form name="searchOptionsForm">
+                                            <div class="flexRow spaceAround5P">
+                                                <input id="search-input" class="tibiaStyleInputType1"
+                                                    name="searchPhrase" type="text" value=""
+                                                    placeholder="Enter the search phrase..." />
+                                                <div id="options-button" class="tibiaStyleButtonType1 appearsMobile"
+                                                    style="width: 2.7rem; height: 2.7rem; margin-left: 0.5rem">
+                                                    <div
+                                                        style="width: 2.7rem; height: 2.7rem; background-image: url(img/uiimg/gear.svg); background-size: cover; position: absolute; top:0;left:0;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="options"
+                                                class="flexRow disappearsMobile spaceAround5P tibiaStyleBackgroundLight">
+                                                <div class="halfWidth">
+                                                    <label class="tibiaStyleCheckBoxContainer">
+                                                        Auto Search
+                                                        <input id="autoSearch" class="tibiaStyleCheckBoxInput"
+                                                            name="autoSearch" type="checkbox" checked />
+                                                        <span class="tibiaStyleCheckBox"></span>
+                                                    </label>
+                                                    <br />
+                                                    <p class="tibiaStyleParagraph userSelectLock">Search phrase
+                                                        should be:</p>
+                                                    <label class="tibiaStyleRadioContainer">
+                                                        Same (=)
+                                                        <input class="tibiaStyleRadioInput" name="phraseComparison"
+                                                            value="same" type="radio" />
+                                                        <span class="tibiaStyleRadio"></span>
+                                                    </label>
+                                                    <label class="tibiaStyleRadioContainer">
+                                                        Similar (~)
+                                                        <input class="tibiaStyleRadioInput" name="phraseComparison"
+                                                            value="similar" type="radio" checked />
+                                                        <span class="tibiaStyleRadio"></span>
+                                                    </label>
+                                                    <br />
+                                                    <p class="tibiaStyleParagraph userSelectLock">Search by:</p>
+                                                    <label class="tibiaStyleCheckBoxContainer">
+                                                        Name
+                                                        <input id="npcName" class="tibiaStyleCheckBoxInput"
+                                                            name="searchPhraseInNpcName" type="checkbox" checked />
+                                                        <span class="tibiaStyleCheckBox"></span>
+                                                    </label>
+                                                    <label class="tibiaStyleCheckBoxContainer">
+                                                        Response
+                                                        <input id="npcDialogue" class="tibiaStyleCheckBoxInput"
+                                                            name="searchPhraseInNpcDialogue" type="checkbox" checked />
+                                                        <span class="tibiaStyleCheckBox"></span>
+                                                    </label>
+                                                    <label class="tibiaStyleCheckBoxContainer">
+                                                        Keyword
+                                                        <input id="playerDialogue" class="tibiaStyleCheckBoxInput"
+                                                            name="searchPhraseInPlayerDialogue" type="checkbox"
+                                                            checked />
+                                                        <span class="tibiaStyleCheckBox"></span>
+                                                    </label>
+                                                </div>
+
+                                                <div class="halfWidth">
+                                                    <p class="tibiaStyleParagraph userSelectLock">Search MODE:</p>
+                                                    <label class="tibiaStyleRadioContainer">
+                                                        Phrase / Properties
+                                                        <input class="tibiaStyleRadioInput" name="searchMode" value="1"
+                                                            type="radio" checked />
+                                                        <span class="tibiaStyleRadio"></span>
+                                                    </label>
+                                                    <label class="tibiaStyleRadioContainer">
+                                                        Properties
+                                                        <input class="tibiaStyleRadioInput" name="searchMode" value="2"
+                                                            type="radio" />
+                                                        <span class="tibiaStyleRadio"></span>
+                                                    </label>
+
+                                                    <p class="tibiaStyleParagraph userSelectLock">Race:</p>
+                                                    <select id="racesList" class="tibiaStyleSelect bottomSpace5M"
+                                                        name="searchPhraseByRace">
+                                                        <option value="All" selected>All</option>
+                                                    </select>
+
+                                                    <p class="tibiaStyleParagraph userSelectLock">Location:</p>
+                                                    <select id="locationsList" class="tibiaStyleSelect bottomSpace5M"
+                                                        name="searchPhraseByLocation">
+                                                        <option value="All" selected>All</option>
+                                                    </select>
+
+                                                    <p class="tibiaStyleParagraph userSelectLock">Job:</p>
+                                                    <select id="jobsList" class="tibiaStyleSelect"
+                                                        name="searchPhraseByJob">
+                                                        <option value="All" selected>All</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="interfaceItem disappearsMobile">
+                                <div class="windowBox tibiaStyleBackgroundLight tibiaStyleBorderHigh2">
+                                    <div
+                                        class="windowTitleBar tibiaStyleTitleBarType1 tibiaStyleBorderBottom tibiaStyleBackgroundDark">
+                                        NPC Info
+                                    </div>
+
+                                    <div class="windowContent spaceAround5P">
+                                        <div class="tibiaStyleBorderDeep1 fullHeight">
+                                            <div id="npc-info"
+                                                class="npcInformationContainer spaceAround10P fullHeight">
+                                                <p class="tibiaStyleParagraph userSelectLock">Click on NPC image to
+                                                    view more information.</p>
+												<p class="tibiaStyleParagraph userSelectLock">Use a comma to search with multiple keywords. e.g. "pythius,carlin"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="interfaceItem">
+                                <div id="tabContainer_1" class="tabContainer fullHeight fullWidth">
+                                    <ul class="tabs windowTabsContent userSelectLock"></ul>
+                                    <div
+                                        class="tabContent tibiaStyleBackgroundLight tibiaStyleBorderHigh2 spaceAround5P scrollWindow">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="communities">
+        <a class="communitiesButton" href="https://www.reddit.com/r/SolvingTibia/" target="_blank">
+            <div class="reddit">
+
+            </div>
+        </a>
+        <a class="communitiesButton" href="https://discord.gg/JRvjSuU99U" target="_blank">
+            <div class="discord">
+
+            </div>
+        </a>
+        <a class="communitiesButton" href="https://github.com/s2ward/tibia" target="_blank">
+            <div class="github">
+
+            </div>
+        </a>
+    </div>
+</body>
+
+</html>

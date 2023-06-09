@@ -1,36 +1,35 @@
-$(document).ready(function () {
-  const $articlesDiv = $('#articles');
-
-  $.getJSON('./articles.json', function (data) {
-    $articlesDiv.empty();
-
-    $.each(data.sections, function (_, section) {
-      const $articleBoxContentHeader = $('<header>').addClass('talesoftibia').text(section.header);
-      const $articleBoxContentDiv = $('<div>').addClass('scroll-box');
-
-      $.each(section.articles, function (_, article) {
-        const $articleBoxContentDiv1 = $('<div>').addClass('box');
-        const $articleBoxContentA = $('<a>').attr({ href: article.url, target: '_blank' });
-        const $articleBoxContentDiv2 = $('<div>').addClass('article-image');
-        let $articleBoxContentImg = null;
-        if (article.hasOwnProperty('video')) {
-          $articleBoxContentImg = $('<iframe>').attr({ src: article.video, frameborder: "0", allowfullscreen: true }).css({ width: '128px', height: '128px' });
-        } else if (article.hasOwnProperty('image')) {
-          $articleBoxContentImg = $('<img>').attr({ src: article.image, alt: article.title }).css({ width: '128px', height: '128px' });
-        }
-        const $articleBoxContentH3 = $('<h3>').text(article.title);
-        const $articleBoxContentP = $('<p>').text(article.author);
-
-        $articleBoxContentDiv2.append($articleBoxContentImg, $articleBoxContentH3, $articleBoxContentP);
-        $articleBoxContentA.append($articleBoxContentDiv2);
-        $articleBoxContentDiv1.append($articleBoxContentA);
-        $articleBoxContentDiv.append($articleBoxContentDiv1);
-      });
-
-      $articlesDiv.append($articleBoxContentHeader, $articleBoxContentDiv);
+fetch('./articles.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error fetching articles');
+    }
+    return response.json();
+  })
+  .then(data => {
+    $(document).ready(function () {
+      const articlesDiv = $('#articles');
+      const articlesDivHTML = $(`
+        ${data.sections.map(section => `
+          <header class="talesoftibia">${section.header}</header>
+          <div class="scroll-box">
+            ${section.articles.map(article => `
+              <div class="box">
+                <a href="${article.url}" target="_blank">
+                  <div class="article-image">
+                    ${article.hasOwnProperty('video') ? `<iframe src="${article.video}" frameborder="0" allowfullscreen="true" style="width: 128px; height: 128px;"></iframe>` : `<img src="${article.image}" alt="${article.title}" style="width: 128px; height: 128px;"></img>`}
+                    <h3>${article.title}</h3>
+                    <p>${article.author}</p>
+                  </div>
+                </a>
+              </div>
+            `).join('')}
+          </div>
+        `).join('')}
+      `);
+      
+      articlesDiv.empty().html(articlesDivHTML);
     });
   })
-    .fail(function (error) {
-      console.error('Error fetching articles:', error);
-    });
-});
+  .catch(error => {
+    console.error('Error fetching articles:', error);
+  });

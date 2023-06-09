@@ -15,13 +15,13 @@
         "url": "achievements.html"
     },
     {
-        "name": "Get Started",
-        "title": "Get Started",
-        "url": "get-started.html"
+        "name": "Magic Web",
+        "title": "Magic web",
+        "url": "https://magic-web.talesoftibia.com/#32487,31929,7:0"
     },
     {
-        "name": "NPC Search",
-        "title": "NPC Search",
-        "url": "tools.html"
+        "name": "NPearch",
+        "title": "NPSearch",
+        "url": "npsearch.html"
     }
 ]
