@@ -53,7 +53,7 @@ NPSearch works like this:
 
 - An account system for comments and promoting interactivity (and who knows what else might emerge, share your ideas!)  
     - The user inputs an Alias, clicks a button and get a randomly generated number, for example '123456789123'.  
-    - The player can now login using their number, and be distinguished as {alias}. No email during registration nor saved anywhere, no GDPR do think about.   
+    - The player can now login using their number, and be distinguished as {alias}. No email during registration nor saved anywhere, no GDPR to think about.   
     - This could be realized with AWS Api-Gateway -> AWS Lambda -> AWS DynamoDB.  
     - This would have rate-limiting in front to only allow 1 or 2 accounts to be created per user per day.  
 - A way to comment on stuff, see above.  
