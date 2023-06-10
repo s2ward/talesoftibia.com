@@ -1,0 +1,43 @@
+canvas {
+	image-rendering: -webkit-optimize-contrast; /* Old Android, Safari, UC Browser */
+	image-rendering: -moz-crisp-edges; /* Firefox */
+	image-rendering: crisp-edges; /* Safari */
+	image-rendering: pixelated; /* Chrome & Opera */
+	/* Note: keep this declaration at the bottom until
+	   https://github.com/postcss/autoprefixer/issues/632 is fixed. */
+	-ms-interpolation-mode: nearest-neighbor; /* IE */
+}
+
+canvas,
+.leaflet-container {
+	background: #000;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+	transition-duration: 0.15s;
+}
+
+.leaflet-control-layers {
+	display: none;
+}
+
+.leaflet-control-zoom-in {
+	line-height: 1.3;
+}
+
+.leaflet-control-zoom-out {
+	line-height: 1.1;
+}
+
+.leaflet-control-container, .leaflet-control-container a {
+	color: #000 !important;
+}
+
+.leaflet-control-container a:hover,
+.leaflet-control-container a:focus {
+	background-color: lightgray;
+}
+
+.leaflet-marker-icon {
+	image-rendering: pixelated;
+}
