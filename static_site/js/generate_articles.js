@@ -16,7 +16,7 @@ fetch('./articles.json')
               <div class="box">
                 <a href="${article.url}" target="_blank">
                   <div class="article-image">
-                    ${article.hasOwnProperty('video') ? `<iframe src="${article.video}" frameborder="0" allowfullscreen="true" style="width: 128px; height: 128px;"></iframe>` : `<img src="${article.image}" alt="${article.title}" style="width: 128px; height: 128px;"></img>`}
+                  ${Object.prototype.hasOwnProperty.call(article, 'video') ? `<iframe src="${article.video}" frameborder="0" allowfullscreen="true" style="width: 128px; height: 128px;"></iframe>` : `<img src="${article.image}" alt="${article.title}" style="width: 128px; height: 128px;"></img>`}
                     <h3>${article.title}</h3>
                     <p>${article.author}</p>
                   </div>
@@ -26,7 +26,7 @@ fetch('./articles.json')
           </div>
         `).join('')}
       `);
-      
+
       articlesDiv.empty().html(articlesDivHTML);
     });
   })

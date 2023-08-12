@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>TOT - NPC Search</title>
+    <title>TOT - LIB Search</title>
 
     <meta charset="UTF-8" />
     <meta name="description"
@@ -27,7 +27,7 @@
     <script type="application/javascript"
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script type="application/javascript" src="js/generate_menu.js"></script>
-    <script type="application/javascript" src="js/npsearch.js"></script>
+    <script type="application/javascript" src="js/booksearch.js"></script>
 </head>
 
 <body>
@@ -122,23 +122,23 @@
                                                             name="autoSearch" type="checkbox" checked />
                                                         <span class="tibiaStyleCheckBox"></span>
                                                     </label>
-                                                    <p class="tibiaStyleParagraph">Search by:</p>
+                                                    <p class="tibiaStyleParagraph">Search in:</p>
                                                     <label class="tibiaStyleCheckBoxContainer">
-                                                        Name
-                                                        <input id="npcName" class="tibiaStyleCheckBoxInput"
-                                                            name="searchPhraseInNpcName" type="checkbox" checked />
+                                                        Books
+                                                        <input id="books" class="tibiaStyleCheckBoxInput"
+                                                            name="searchPhraseInBooks" type="checkbox" checked />
                                                         <span class="tibiaStyleCheckBox"></span>
                                                     </label>
                                                     <label class="tibiaStyleCheckBoxContainer">
-                                                        Response
-                                                        <input id="npcDialogue" class="tibiaStyleCheckBoxInput"
-                                                            name="searchPhraseInNpcDialogue" type="checkbox" checked />
+                                                        Creatures
+                                                        <input id="creatures" class="tibiaStyleCheckBoxInput"
+                                                            name="searchPhraseInCreatures" type="checkbox" checked />
                                                         <span class="tibiaStyleCheckBox"></span>
                                                     </label>
                                                     <label class="tibiaStyleCheckBoxContainer">
-                                                        Keyword
-                                                        <input id="playerDialogue" class="tibiaStyleCheckBoxInput"
-                                                            name="searchPhraseInPlayerDialogue" type="checkbox" checked />
+                                                        Spells
+                                                        <input id="achievements" class="tibiaStyleCheckBoxInput"
+                                                            name="searchPhraseInAchievements" type="checkbox" checked />
                                                         <span class="tibiaStyleCheckBox"></span>
                                                     </label>
                                                     <br />
@@ -158,27 +158,27 @@
                                                 </div>
 
                                                 <div class="halfWidth">
-                                                    <p class="tibiaStyleParagraph">Race:</p>
-                                                    <select id="racesList" class="tibiaStyleSelect bottomSpace5M"
-                                                        name="searchPhraseByRace">
+                                                    <p class="tibiaStyleParagraph">Libraries:</p>
+                                                    <select id="namesList" class="tibiaStyleSelect bottomSpace5M"
+                                                        name="filterResultsByName">
                                                         <option value="All" selected>All</option>
                                                     </select>
 
                                                     <p class="tibiaStyleParagraph">Location:</p>
                                                     <select id="locationsList" class="tibiaStyleSelect bottomSpace5M"
-                                                        name="searchPhraseByLocation">
+                                                        name="filterResultsByLocation">
                                                         <option value="All" selected>All</option>
                                                     </select>
 
-                                                    <p class="tibiaStyleParagraph">Job:</p>
-                                                    <select id="jobsList" class="tibiaStyleSelect bottomSpace5M"
-                                                        name="searchPhraseByJob">
+                                                    <p class="tibiaStyleParagraph">Author:</p>
+                                                    <select id="authorsList" class="tibiaStyleSelect bottomSpace5M"
+                                                        name="filterResultsByAuthor">
                                                         <option value="All" selected>All</option>
                                                     </select>
 
                                                     <p class="tibiaStyleParagraph">Version:</p>
                                                     <select id="versionsList" class="tibiaStyleSelect"
-                                                        name="searchPhraseByVersion">
+                                                        name="filterResultsByVersion">
                                                         <option value="All" selected>All</option>
                                                     </select>
                                                 </div>

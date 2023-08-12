@@ -16,12 +16,17 @@
     },
     {
         "name": "Magic Web",
-        "title": "Magic web",
+        "title": "Magic Web",
         "url": "https://magic-web.talesoftibia.com/#32487,31929,7:0"
     },
     {
-        "name": "NPearch",
+        "name": "NPSearch",
         "title": "NPSearch",
         "url": "npsearch.html"
+    },
+    {
+        "name": "LIBSearch",
+        "title": "LIBSearch",
+        "url": "libsearch.html"
     }
 ]

@@ -15,7 +15,6 @@ fetch('./menu.json')
           </li>
         `).join('')}
       `);
-      
       menuDiv.empty().html(menuItems);
     });
   })
@@ -30,7 +29,7 @@ fetch('./menu.json')
     const handleWindowResize = () => {
         if ($(window).width() > 900) {
             menuElement.css({
-                display: '',
+                display: ''
             });
         }
     };

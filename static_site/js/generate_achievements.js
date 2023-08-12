@@ -19,7 +19,6 @@ fetch('./achievements.json')
           </tr>
         `).join('')}
       `);
-      
       achievementsTable.empty().html(achievementsTableHtml);
     });
   })
