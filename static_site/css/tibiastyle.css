@@ -208,6 +208,13 @@ body {
   padding-bottom: 1rem;
 }
 
+.horizontalBar {
+  border-top: 0.1rem solid rgb(37, 37, 37);
+  border-left: 0.1rem solid rgb(37, 37, 37);
+  border-bottom: 0.1rem solid rgb(113, 113, 113);
+  border-right: 0.1rem solid rgb(113, 113, 113);
+}
+
 /* */
 @media (min-width: 1300px) {
   .appearsDesktop {
@@ -423,6 +430,8 @@ body {
 }
 
 .npcBoxContent {
+  display: flex;
+  flex-direction: row;
   width: 100%;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -441,7 +450,6 @@ body {
 }
 
 .npcBoxContent div:last-child {
-  float: left;
   width: calc(100% - 64px);
   padding-left: 1rem;
   line-height: 1.3rem;
@@ -451,7 +459,6 @@ body {
 }
 
 .npcBoxContent div:first-child {
-  float: left;
   height: 64px;
   width: 64px;
   background-position: center;
@@ -465,33 +472,6 @@ body {
   cursor: pointer;
   box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37) inset, -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
   background-color: rgba(0, 0, 0, 0.25);
-}
-
-.npcImage {
-  float: left;
-  height: 64px;
-  width: 64px;
-  background-position: center;
-  background-repeat: no-repeat;
-  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37, 0.0) inset, -0.1rem -0.1rem 0 0 rgba(113, 113, 113, 0.0) inset;
-  background-color: rgba(0, 0, 0, 0.0);
-  transition: 0.1s;
-}
-
-.npcImage:hover {
-  cursor: pointer;
-  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37) inset, -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
-  background-color: rgba(0, 0, 0, 0.25);
-}
-
-.npcDialogue {
-  float: left;
-  width: calc(100% - 64px);
-  padding-left: 1rem;
-  line-height: 1.3rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.04rem;
 }
 
 .npcBoxContent div a {
@@ -513,7 +493,6 @@ body {
   color: #1f9ffe;
   display: inline;
 }
-
 
 .playerDialogueColor {
   color: #9f9ffe;
@@ -1159,6 +1138,7 @@ body {
 }
 
 .windowTabsContent {
+  min-height: 2.6rem;
   width: 100%;
   padding-left: 2.4rem;
   flex-wrap: wrap-reverse;
@@ -1244,4 +1224,86 @@ body {
   width: 6rem;
   background-image: url(../img/github.svg);
   background-size: contain;
+}
+
+
+/* ---------------------------------------------- */
+
+.allNpcBox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+}
+
+.npcBox {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-basis: 25%;
+  min-width: 16rem;
+  padding: 0.5rem;
+}
+
+.npcBox:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37) inset, -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
+}
+
+
+/* -------------------------------- */
+.bookBoxContent {
+  /*width: 29.75rem;
+  margin: auto;*/
+  display: inline-block;
+  width: 100%;
+}
+
+.tibiaStyleTextLight {
+  color: #c0c0c0;
+  font-size: 1.1rem;
+  line-height: 1.3rem;
+  letter-spacing: 0.04rem;
+}
+
+.bookImage {
+  min-height: 64px;
+  min-width: 64px;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0.1rem 0.1rem 0 0 rgba(37, 37, 37, 0.0) inset, -0.1rem -0.1rem 0 0 rgba(113, 113, 113, 0.0) inset;
+  background-color: rgba(0, 0, 0, 0.0);
+  transition: 0.1s;
+}
+
+.bookName {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.bookText {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  background-color: #333333;
+}
+
+.bookText a {
+  color: #ff9854;
+  display: inline;
+  /*text-decoration: underline;*/
+}
+
+.bookHeader {
+
+}
+
+.bookHeader:hover {
+  text-decoration: underline;
+  color: white;
+  cursor: pointer;
 }
