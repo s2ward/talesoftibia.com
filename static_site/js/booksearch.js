@@ -261,7 +261,7 @@ function createPropertyLists() {
     const NAMES_OPTIONS = NAMES_ARRAY.map(libraries => `<option value="${libraries}">${libraries.replace(/_/g, ' ')}</option>`).join('');
     $('#namesList').html(`<option selected>All</option>${NAMES_OPTIONS}`);
 
-    const LOCATIONS_ARRAY = uniqueValues(booksData, 'locations-old');
+    const LOCATIONS_ARRAY = uniqueValues(booksData, 'locations');
     const LOCATIONS_OPTIONS = LOCATIONS_ARRAY.map(locations => `<option value="${locations}">${locations}</option>`).join('');
     $('#locationsList').html(`<option selected>All</option>${LOCATIONS_OPTIONS}`);
 
@@ -499,8 +499,8 @@ function searchSpecificObject(keyword) {
                     )
                 ) &&
                 (
-                    ([libraries].some(libraries => String(libraries) === filterResultsByNameValue) || filterResultsByNameValue === 'All') &&
-                    ([locations].some(location => String(location) === filterResultsByLocationValue) || filterResultsByLocationValue === 'All') &&
+                    (libraries.some(libraries => String(libraries) === filterResultsByNameValue) || filterResultsByNameValue === 'All') &&
+                    (locations.some(location => String(location) === filterResultsByLocationValue) || filterResultsByLocationValue === 'All') &&
                     (author === filterResultsByAuthorValue || filterResultsByAuthorValue === 'All') &&
                     (version === filterResultsByVersionValue || filterResultsByVersionValue === 'All')
                 )
@@ -513,8 +513,8 @@ function searchSpecificObject(keyword) {
                         (searchPhraseInAchievementsValue && obj.type === 'spell'))
                 ) &&
                 (
-                    ([libraries].some(libraries => String(libraries) === filterResultsByNameValue) || filterResultsByNameValue === 'All') &&
-                    ([locations].some(location => String(location) === filterResultsByLocationValue) || filterResultsByLocationValue === 'All') &&
+                    (libraries.some(libraries => String(libraries) === filterResultsByNameValue) || filterResultsByNameValue === 'All') &&
+                    (locations.some(location => String(location) === filterResultsByLocationValue) || filterResultsByLocationValue === 'All') &&
                     (author === filterResultsByAuthorValue || filterResultsByAuthorValue === 'All') &&
                     (version === filterResultsByVersionValue || filterResultsByVersionValue === 'All')
                 )
