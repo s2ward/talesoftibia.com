@@ -103,12 +103,15 @@ class Tab {
 }
 
 function updateURLWithCurrentTab(tabName) {
-  const currentTab = new URL(window.location.href).searchParams.get('t');
-  if (currentTab === tabName.replace(/ /g, '_')) return;  // Prevent unnecessary URL update
+    const currentTab = new URL(window.location.href).searchParams.get('t');
+    if (currentTab === tabName.replace(/ /g, '_')) return;  // Prevent unnecessary URL update
 
-  const url = new URL(window.location);
-  url.searchParams.set('t', tabName.replace(/ /g, '_'));
-  window.history.replaceState({}, '', url);
+    const url = new URL(window.location);
+
+    if (DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf('t')] !== tabName) {
+        url.searchParams.set('t', tabName.replace(/ /g, '_'));
+    }
+    window.history.replaceState({}, '', url);
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -152,46 +155,46 @@ Promise.all([FETCH_BOOKS, FETCH_IMG])
         }
 
         // Initialize tabs after data is loaded
-      $(document).ready(() => {
-        let resultsTab = new Tab('Results', false, false, 'tabContainer_1', false);
-        
+        $(document).ready(() => {
+            let resultsTab = new Tab('Results', false, false, 'tabContainer_1', false);
 
-        mainTab = resultsTab; // Assign to global variable
-        infoTab = infoTabInstance; // Assign to global variable
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const specifiedTabName = urlParams.get('t');
-        informations = urlParams.get('i') || '';
+            mainTab = resultsTab; // Assign to global variable
+            infoTab = infoTabInstance; // Assign to global variable
 
-        if (informations) {
-          showInformation(informations);
-        }
+            const urlParams = new URLSearchParams(window.location.search);
+            const specifiedTabName = urlParams.get('t');
+            informations = urlParams.get('i') || '';
 
-        if (specifiedTabName) {
-            const tabKey = `${specifiedTabName}-tabContainer_1`;
-            if (Tab.existingTabs.hasOwnProperty(tabKey)) {
-                // Activate existing tab if found
-                Tab.existingTabs[tabKey].setActive();
-            } else {
-                // If not found, create and activate a new tab
-                showSpecificObject(specifiedTabName);
+            if (informations) {
+                showInformation(informations);
             }
-        } else {
-            // If no specific tab is specified, activate the Results tab
-            resultsTab.setActive();
-        }
 
-        setUpFormListeners()
-            .then(createPropertyLists)
-            .then(getURLParams)
-            .then(setFormSettings)
-            .then(saveFormValues)
-            .then(updateURLWithSearchParams)
-            .catch(function (error) {
-                console.error('Error:', error);
-            });
-    });
-})
+            if (specifiedTabName) {
+                const tabKey = `${specifiedTabName}-tabContainer_1`;
+                if (Tab.existingTabs.hasOwnProperty(tabKey)) {
+                    // Activate existing tab if found
+                    Tab.existingTabs[tabKey].setActive();
+                } else {
+                    // If not found, create and activate a new tab
+                    showSpecificObject(specifiedTabName);
+                }
+            } else {
+                // If no specific tab is specified, activate the Results tab
+                resultsTab.setActive();
+            }
+
+            setUpFormListeners()
+                .then(createPropertyLists)
+                .then(getURLParams)
+                .then(setFormSettings)
+                .then(saveFormValues)
+                .then(updateURLWithSearchParams)
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+    })
     .catch(handleFetchError);
 // --- --- --- --- --- --- --- --- ---
 
@@ -340,11 +343,11 @@ function getURLParams() {
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'b', 'c', 'ac', 'm', 'n', 'l', 'ar', 'v', 'i', 't'];
-const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'i', 'Results'];
+const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', '', 'Results'];
 
 function getQueryParam(paramName) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(paramName) || DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf(paramName)];
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(paramName) || DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf(paramName)];
 }
 
 function validateParam(paramName, paramValue) {
@@ -465,30 +468,34 @@ function saveFormValues() {
 
 // This function updates the URL with the selected search params.
 function updateURLWithSearchParams() {
-  const URL_PARAMS = {
-    s: searchPhraseValue,          
-    a: autoSearchValue ? '1' : '0', 
-    b: searchPhraseInBooksValue ? '1' : '0',   
-    c: searchPhraseInCreaturesValue ? '1' : '0',  
-    ac: searchPhraseInAchievementsValue ? '1' : '0',   
-    m: searchModeValue,             
-    n: filterResultsByNameValue,    
-    l: filterResultsByLocationValue, 
-    ar: filterResultsByAuthorValue,     
-    v: filterResultsByVersionValue, 
-    i: informations,               
-    t: tabParam                    
-};
+    const URL_PARAMS = {
+        s: searchPhraseValue,
+        a: autoSearchValue ? '1' : '0',
+        b: searchPhraseInBooksValue ? '1' : '0',
+        c: searchPhraseInCreaturesValue ? '1' : '0',
+        ac: searchPhraseInAchievementsValue ? '1' : '0',
+        m: searchModeValue,
+        n: filterResultsByNameValue,
+        l: filterResultsByLocationValue,
+        ar: filterResultsByAuthorValue,
+        v: filterResultsByVersionValue,
+        i: informations,
+        t: tabParam
+    };
 
-  const NEW_URL = new URL(window.location.href);
+    const NEW_URL = new URL(window.location.href);
+    new URLSearchParams(URL_PARAMS).forEach((value, key) => {
+        if (value == DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf(key)]) {
+            // console.log(`default ${key}`)
+        } else {
+            NEW_URL.searchParams.set(key, value);
+            // console.log(`set ${key} to ${value}`)
+        }
+    });
 
-  new URLSearchParams(URL_PARAMS).forEach((value, key) => {
-      NEW_URL.searchParams.set(key, value);
-  });
+    window.history.replaceState({}, '', NEW_URL.href);
 
-  window.history.replaceState({}, '', NEW_URL.href);
-
-  return Promise.resolve();
+    return Promise.resolve();
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -503,7 +510,7 @@ function searchSpecificObject(keyword) {
     const BOOK_TEXTS_ARRAY = [];
 
     for (const obj of booksData) {
-        const { name, locations, libraries, author, version, text} = obj;
+        const { name, locations, libraries, author, version, text } = obj;
 
         const FILTERED_BOOK_TEXTS = [obj].filter(book => {
             if (searchModeValue === 1 &&
@@ -576,7 +583,7 @@ function searchSpecificObject(keyword) {
         `).join('') + '</div>';
     }
 
-    if (shouldActivateResultsTab()) { 
+    if (shouldActivateResultsTab()) {
         mainTab.enterContent(BOOK_TEXTS_ARRAY_DIV_CONTENT);
         mainTab.setActive();
     } else {
@@ -588,15 +595,15 @@ function searchSpecificObject(keyword) {
 }
 
 function shouldActivateResultsTab() {
-  // Get the 'tab' parameter from the URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const specifiedTabName = urlParams.get('t');
+    // Get the 'tab' parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const specifiedTabName = urlParams.get('t');
 
-  // If the 'tab' parameter is not specified or is 'Results', activate the Results tab
-  if (!specifiedTabName || specifiedTabName === 'Results') {
-      return true;
-  }
-  return false;
+    // If the 'tab' parameter is not specified or is 'Results', activate the Results tab
+    if (!specifiedTabName || specifiedTabName === 'Results') {
+        return true;
+    }
+    return false;
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -606,8 +613,8 @@ function shouldActivateResultsTab() {
 function showSpecificObject(objName, closable) {
     const FOUND_OBJ = booksData.find(obj => obj.name === objName);
     if (!FOUND_OBJ) {
-      return false;
-    } 
+        return false;
+    }
 
     if (FOUND_OBJ) {
         const OBJ_DIV_CONTENT = `
@@ -652,13 +659,13 @@ function showSpecificObject(objName, closable) {
 
 // --- --- --- --- --- --- --- --- ---
 function createNewTab(name, active, closable, container, mobile, content) {
-  const KEY = `${name}-${container}`;
+    const KEY = `${name}-${container}`;
 
-  if (!Tab.existingTabs[KEY]) {
-      Tab.existingTabs[KEY] = new Tab(name, active, closable, container, mobile, content);
-  } else {
-  }
-  Tab.existingTabs[KEY].setActive();
+    if (!Tab.existingTabs[KEY]) {
+        Tab.existingTabs[KEY] = new Tab(name, active, closable, container, mobile, content);
+    } else {
+    }
+    Tab.existingTabs[KEY].setActive();
 }
 // --- --- --- --- --- --- --- --- ---
 
@@ -723,7 +730,7 @@ function showInformation(objName) {
         `;
 
         informations = objName;
-        
+
         INFO_DIV.empty().html(INFO_DIV_CONTENT);
         infoTab.enterContent(INFO_DIV_CONTENT);
         updateURLWithInfoParam(informations);
@@ -733,9 +740,9 @@ function showInformation(objName) {
 }
 
 function updateURLWithInfoParam(infoValue) {
-  const url = new URL(window.location);
-  url.searchParams.set('i', infoValue); // Set only the 'info' parameter
-  window.history.replaceState({}, '', url);
+    const url = new URL(window.location);
+    url.searchParams.set('i', infoValue); // Set only the 'info' parameter
+    window.history.replaceState({}, '', url);
 }
 
 // --- --- --- --- --- --- --- --- ---
