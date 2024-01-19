@@ -88,6 +88,7 @@ class Tab {
         this.active = true;
         this.tabElement.addClass('active');
         this.tabContentElement.addClass('active');
+        updateURLWithCurrentTab(this.name);
     }
 
     setInactive() {
@@ -100,6 +101,16 @@ class Tab {
             });
     }
 }
+
+function updateURLWithCurrentTab(tabName) {
+  const currentTab = new URL(window.location.href).searchParams.get('t');
+  if (currentTab === tabName.replace(/ /g, '_')) return;  // Prevent unnecessary URL update
+
+  const url = new URL(window.location);
+  url.searchParams.set('t', tabName.replace(/ /g, '_'));
+  window.history.replaceState({}, '', url);
+}
+
 // --- --- --- --- --- --- --- --- ---
 
 // Creating the main tab of the window and references to it.
@@ -107,21 +118,11 @@ let newTab = null;
 let mainTab = null;
 let infoTab = null;
 
-$(document).ready(() => {
-    newTab = new Tab('Results', true, false, 'tabContainer_1', false);
-    mainTab = newTab;
-    mainTab.enterContent('');
-
-    newTab = new Tab('Info', false, false, 'tabContainer_1', true);
-    infoTab = newTab;
-    infoTab.enterContent('');
-});
-// --- --- --- --- --- --- --- --- ---
-
 // Retrieve the contents of json files and save them to variables.
 let booksData = [];
 let imgData = [];
 const mergeData = [];
+let infoTabInstance = new Tab('Info', false, false, 'tabContainer_1', true);
 
 function handleFetchError(error) {
     console.error('Error:', error);
@@ -150,18 +151,47 @@ Promise.all([FETCH_BOOKS, FETCH_IMG])
             }
         }
 
-        $(document).ready(() => {
-            setUpFormListeners()
-                .then(createPropertyLists)
-                .then(getURLParams)
-                .then(setFormSettings)
-                .then(saveFormValues)
-                .then(updateURLWithSearchParams)
-                .catch(function (error) {
-                    console.error('Error:', error);
-                });
-        });
-    })
+        // Initialize tabs after data is loaded
+      $(document).ready(() => {
+        let resultsTab = new Tab('Results', false, false, 'tabContainer_1', false);
+        
+
+        mainTab = resultsTab; // Assign to global variable
+        infoTab = infoTabInstance; // Assign to global variable
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const specifiedTabName = urlParams.get('t');
+        informations = urlParams.get('i') || '';
+
+        if (informations) {
+          showInformation(informations);
+        }
+
+        if (specifiedTabName) {
+            const tabKey = `${specifiedTabName}-tabContainer_1`;
+            if (Tab.existingTabs.hasOwnProperty(tabKey)) {
+                // Activate existing tab if found
+                Tab.existingTabs[tabKey].setActive();
+            } else {
+                // If not found, create and activate a new tab
+                showSpecificObject(specifiedTabName);
+            }
+        } else {
+            // If no specific tab is specified, activate the Results tab
+            resultsTab.setActive();
+        }
+
+        setUpFormListeners()
+            .then(createPropertyLists)
+            .then(getURLParams)
+            .then(setFormSettings)
+            .then(saveFormValues)
+            .then(updateURLWithSearchParams)
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    });
+})
     .catch(handleFetchError);
 // --- --- --- --- --- --- --- --- ---
 
@@ -289,46 +319,32 @@ let locationParam = '';
 let authorParam = '';
 let versionParam = '';
 let infoParam = '';
+let tabParam = '';
 
 function getURLParams() {
-    searchParam = String(getQueryParam('search'));
-    autoParam = getQueryParam('auto') === 'true';
-    booksParam = getQueryParam('books') === 'true';
-    creaturesParam = getQueryParam('creatures') === 'true';
-    achievementsParam = getQueryParam('achievements') === 'true';
-    modeParam = getQueryParam('mode');
-    nameParam = String(getQueryParam('name'));
-    locationParam = String(getQueryParam('location'));
-    authorParam = String(getQueryParam('author'));
-    versionParam = String(getQueryParam('version'));
-    infoParam = String(getQueryParam('info'));
+    searchParam = String(getQueryParam('s'));
+    autoParam = getQueryParam('a') === '1';
+    booksParam = getQueryParam('b') === '1';
+    creaturesParam = getQueryParam('c') === '1';
+    achievementsParam = getQueryParam('ac') === '1';
+    modeParam = getQueryParam('m');
+    nameParam = String(getQueryParam('n'));
+    locationParam = String(getQueryParam('l'));
+    authorParam = String(getQueryParam('ar'));
+    versionParam = String(getQueryParam('v'));
+    infoParam = String(getQueryParam('i')); // 'info' is used as a shortcut for 'info'
+    tabParam = String(getQueryParam('t'));
 
     return Promise.resolve();
 }
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
-const AVAILABLE_PARAMS_NAMES = ['search', 'auto', 'books', 'creatures', 'achievements', 'mode', 'name', 'location', 'author', 'version', 'info'];
-const DEFAULT_PARAMS_VALUES = ['', 'true', 'true', 'true', 'true', '1', 'All', 'All', 'All', 'All', ''];
+const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'b', 'c', 'ac', 'm', 'n', 'l', 'ar', 'v', 'i', 't'];
+const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'i', 'Results'];
 
 function getQueryParam(paramName) {
-    let paramValue = URL_PARAMS.get(paramName);
-
-    if (paramValue === null && AVAILABLE_PARAMS_NAMES.includes(paramName)) {
-        const INDEX = AVAILABLE_PARAMS_NAMES.indexOf(paramName);
-        paramValue = DEFAULT_PARAMS_VALUES[INDEX];
-        URL_PARAMS.set(paramName, paramValue);
-        const NEW_URL = `${window.location.origin}${window.location.pathname}?${URL_PARAMS.toString()}`;
-        window.history.replaceState({}, '', NEW_URL.href);
-    } else {
-        paramValue = validateParam(paramName, paramValue);
-        if (paramValue !== URL_PARAMS.get(paramName)) {
-            URL_PARAMS.set(paramName, paramValue);
-            const NEW_URL = `${window.location.origin}${window.location.pathname}?${URL_PARAMS.toString()}`;
-            window.history.replaceState({}, '', NEW_URL.href);
-        }
-    }
-
-    return paramValue;
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(paramName) || DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf(paramName)];
 }
 
 function validateParam(paramName, paramValue) {
@@ -336,16 +352,16 @@ function validateParam(paramName, paramValue) {
 
     if (INDEX !== -1) {
         switch (paramName) {
-            case 'mode':
+            case 'm':
                 if (!['1', '2'].includes(paramValue)) {
                     paramValue = DEFAULT_PARAMS_VALUES[INDEX];
                 }
                 break;
-            case 'auto':
-            case 'books':
-            case 'creatures':
-            case 'achievements':
-                if (!['true', 'false'].includes(paramValue)) {
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'ac':
+                if (!['1', '0'].includes(paramValue)) {
                     paramValue = DEFAULT_PARAMS_VALUES[INDEX];
                 }
                 break;
@@ -401,7 +417,6 @@ function setFormSettings() {
         }
     }
 
-    // ---
     if (infoParam !== '') {
         showInformation(infoParam);
     }
@@ -450,30 +465,32 @@ function saveFormValues() {
 
 // This function updates the URL with the selected search params.
 function updateURLWithSearchParams() {
-    const URL_PARAMS = {
-        search: searchPhraseValue,
-        auto: autoSearchValue,
-        books: searchPhraseInBooksValue,
-        creatures: searchPhraseInCreaturesValue,
-        achievements: searchPhraseInAchievementsValue,
-        mode: searchModeValue,
-        name: filterResultsByNameValue,
-        location: filterResultsByLocationValue,
-        author: filterResultsByAuthorValue,
-        version: filterResultsByVersionValue,
-        info: informations
-    };
+  const URL_PARAMS = {
+    s: searchPhraseValue,          
+    a: autoSearchValue ? '1' : '0', 
+    b: searchPhraseInBooksValue ? '1' : '0',   
+    c: searchPhraseInCreaturesValue ? '1' : '0',  
+    ac: searchPhraseInAchievementsValue ? '1' : '0',   
+    m: searchModeValue,             
+    n: filterResultsByNameValue,    
+    l: filterResultsByLocationValue, 
+    ar: filterResultsByAuthorValue,     
+    v: filterResultsByVersionValue, 
+    i: informations,               
+    t: tabParam                    
+};
 
-    const NEW_URL = new URL(window.location.href);
+  const NEW_URL = new URL(window.location.href);
 
-    new URLSearchParams(URL_PARAMS).forEach((value, key) => {
-        NEW_URL.searchParams.set(key, value);
-    });
+  new URLSearchParams(URL_PARAMS).forEach((value, key) => {
+      NEW_URL.searchParams.set(key, value);
+  });
 
-    window.history.replaceState({}, '', NEW_URL.href);
+  window.history.replaceState({}, '', NEW_URL.href);
 
-    return Promise.resolve();
+  return Promise.resolve();
 }
+
 // --- --- --- --- --- --- --- --- ---
 
 // A function that searches for player dialogues with NPCs based on keywords.
@@ -559,17 +576,38 @@ function searchSpecificObject(keyword) {
         `).join('') + '</div>';
     }
 
-    mainTab.enterContent(BOOK_TEXTS_ARRAY_DIV_CONTENT);
-    mainTab.setActive();
+    if (shouldActivateResultsTab()) { 
+        mainTab.enterContent(BOOK_TEXTS_ARRAY_DIV_CONTENT);
+        mainTab.setActive();
+    } else {
+        // Otherwise, display the content without setting the tab as active
+        mainTab.enterContent(BOOK_TEXTS_ARRAY_DIV_CONTENT);
+    }
 
     console.timeEnd('search');
 }
+
+function shouldActivateResultsTab() {
+  // Get the 'tab' parameter from the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const specifiedTabName = urlParams.get('t');
+
+  // If the 'tab' parameter is not specified or is 'Results', activate the Results tab
+  if (!specifiedTabName || specifiedTabName === 'Results') {
+      return true;
+  }
+  return false;
+}
+
 // --- --- --- --- --- --- --- --- ---
 
 // A function that displays the player's dialogues with the NPC based on the name of the npc.
 // eslint-disable-next-line no-unused-vars
 function showSpecificObject(objName, closable) {
     const FOUND_OBJ = booksData.find(obj => obj.name === objName);
+    if (!FOUND_OBJ) {
+      return false;
+    } 
 
     if (FOUND_OBJ) {
         const OBJ_DIV_CONTENT = `
@@ -605,7 +643,7 @@ function showSpecificObject(objName, closable) {
             </div>
         `;
 
-        createNewTab(`${FOUND_OBJ.name.replace(/_/g, ' ')}`, closable, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
+        createNewTab(`${FOUND_OBJ.name.replace(/_/g, ' ')}`, true, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
     } else {
         return false;
     }
@@ -614,11 +652,13 @@ function showSpecificObject(objName, closable) {
 
 // --- --- --- --- --- --- --- --- ---
 function createNewTab(name, active, closable, container, mobile, content) {
-    try {
-        newTab = new Tab(name, active, closable, container, mobile, content);
-    } catch (error) {
-        console.error('Error:', error);
-    }
+  const KEY = `${name}-${container}`;
+
+  if (!Tab.existingTabs[KEY]) {
+      Tab.existingTabs[KEY] = new Tab(name, active, closable, container, mobile, content);
+  } else {
+  }
+  Tab.existingTabs[KEY].setActive();
 }
 // --- --- --- --- --- --- --- --- ---
 
@@ -683,14 +723,21 @@ function showInformation(objName) {
         `;
 
         informations = objName;
-        updateURLWithSearchParams();
-
+        
         INFO_DIV.empty().html(INFO_DIV_CONTENT);
         infoTab.enterContent(INFO_DIV_CONTENT);
+        updateURLWithInfoParam(informations);
     } else {
         return false;
     }
 }
+
+function updateURLWithInfoParam(infoValue) {
+  const url = new URL(window.location);
+  url.searchParams.set('i', infoValue); // Set only the 'info' parameter
+  window.history.replaceState({}, '', url);
+}
+
 // --- --- --- --- --- --- --- --- ---
 
 $(document).ready(() => {

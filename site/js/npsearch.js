@@ -26,6 +26,10 @@ class Tab {
       this.enterContent(this.content);
 
       Tab.existingTabs[KEY] = this;
+
+      if (this.active) {
+        this.setActive();
+    }
   }
 
   createTab() {
@@ -40,7 +44,9 @@ class Tab {
           <div class="tabWindow fullHeight"></div>
       `);
 
-      this.tabElement.on('click', () => this.setActive());
+      this.tabElement.on('click', () => {
+        this.setActive();
+    });
 
       if (this.closable) {
           this.tabElement.find('.closeTab').on('click', (e) => {
@@ -88,6 +94,7 @@ class Tab {
       this.active = true;
       this.tabElement.addClass('active');
       this.tabContentElement.addClass('active');
+      updateURLWithCurrentTab(this.name);
   }
 
   setInactive() {
@@ -100,25 +107,21 @@ class Tab {
           });
   }
 }
-// --- --- --- --- --- --- --- --- ---
 
-// Creating the main tab of the window and references to it.
+function updateURLWithCurrentTab(tabName) {
+    const currentTab = new URL(window.location.href).searchParams.get('t');
+    if (currentTab === tabName.replace(/ /g, '_')) return;  // Prevent unnecessary URL update
+
+    const url = new URL(window.location);
+    url.searchParams.set('t', tabName.replace(/ /g, '_'));
+    window.history.replaceState({}, '', url);
+}
+
+// --- --- --- --- --- --- --- --- ---
 let newTab = null;
 let mainTab = null;
 let infoTab = null;
 
-$(document).ready(() => {
-  newTab = new Tab('Results', true, false, 'tabContainer_1', false);
-  mainTab = newTab;
-  mainTab.enterContent('');
-
-  newTab = new Tab('Info', false, false, 'tabContainer_1', true);
-  infoTab = newTab;
-  infoTab.enterContent('');
-});
-// --- --- --- --- --- --- --- --- ---
-
-// Retrieve the contents of json files and save them to variables.
 let conversationsData = [];
 let npcData = [];
 const mergeData = [];
@@ -126,7 +129,7 @@ const mergeData = [];
 function handleFetchError(error) {
   console.error('Error:', error);
 }
-//https://s2ward.github.io/tibia/api/
+
 const FETCH_CONVERSATIONS = fetch('https://s2ward.github.io/tibia/api/conversations.json')
   .then(response => response.json())
   .catch(handleFetchError);
@@ -150,7 +153,31 @@ Promise.all([FETCH_CONVERSATIONS, FETCH_NPC_DATA])
           }
       }
 
+      // Initialize tabs after data is loaded
       $(document).ready(() => {
+          let resultsTab = new Tab('Results', false, false, 'tabContainer_1', false);
+          let infoTabInstance = new Tab('i', false, false, 'tabContainer_1', true);
+
+          mainTab = resultsTab; // Assign to global variable
+          infoTab = infoTabInstance; // Assign to global variable
+
+          const urlParams = new URLSearchParams(window.location.search);
+          const specifiedTabName = urlParams.get('t');
+
+          if (specifiedTabName) {
+              const tabKey = `${specifiedTabName}-tabContainer_1`;
+              if (Tab.existingTabs.hasOwnProperty(tabKey)) {
+                  // Activate existing tab if found
+                  Tab.existingTabs[tabKey].setActive();
+              } else {
+                  // If not found, create and activate a new tab
+                  showSpecificObject(specifiedTabName);
+              }
+          } else {
+              // If no specific tab is specified, activate the Results tab
+              resultsTab.setActive();
+          }
+
           setUpFormListeners()
               .then(createPropertyLists)
               .then(getURLParams)
@@ -231,7 +258,7 @@ function setUpFormListeners() {
   let timer;
   searchPhraseInput.addEventListener('input', () => {
       clearTimeout(timer);
-      timer = setTimeout(handleInputDebounced, 0);
+      timer = setTimeout(handleInputDebounced, 50);
   });
 
   return Promise.resolve();
@@ -289,26 +316,29 @@ let locationParam = '';
 let jobParam = '';
 let versionParam = '';
 let infoParam = '';
+let tabParam = '';
 
 function getURLParams() {
-  searchParam = String(getQueryParam('search'));
-  autoParam = getQueryParam('auto') === 'true';
-  nameParam = getQueryParam('name') === 'true';
-  responseParam = getQueryParam('response') === 'true';
-  keywordParam = getQueryParam('keyword') === 'true';
-  modeParam = getQueryParam('mode');
-  raceParam = String(getQueryParam('race'));
-  locationParam = String(getQueryParam('location'));
-  jobParam = String(getQueryParam('job'));
-  versionParam = String(getQueryParam('version'));
-  infoParam = String(getQueryParam('info'));
+  searchParam = String(getQueryParam('s'));
+  autoParam = getQueryParam('a') === '1'; // '1' for true, '0' for false
+  nameParam = getQueryParam('n') === '1';
+  responseParam = getQueryParam('r') === '1';
+  keywordParam = getQueryParam('k') === '1';
+  modeParam = getQueryParam('m');
+  raceParam = String(getQueryParam('rc'));
+  locationParam = String(getQueryParam('l'));
+  jobParam = String(getQueryParam('j'));
+  versionParam = String(getQueryParam('v'));
+  infoParam = String(getQueryParam('i'));
+  tabParam = String(getQueryParam('t'));
 
   return Promise.resolve();
 }
 
+
 const URL_PARAMS = new URLSearchParams(window.location.search);
-const AVAILABLE_PARAMS_NAMES = ['search', 'auto', 'name', 'response', 'keyword', 'mode', 'race', 'location', 'job', 'version', 'info'];
-const DEFAULT_PARAMS_VALUES = ['', 'true', 'true', 'true', 'true', '1', 'All', 'All', 'All', 'All', ''];
+const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'n', 'r', 'k', 'm', 'rc', 'l', 'j', 'v', 'i', 't'];
+const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'i', 'Results'];
 
 function getQueryParam(paramName) {
   let paramValue = URL_PARAMS.get(paramName);
@@ -316,16 +346,8 @@ function getQueryParam(paramName) {
   if (paramValue === null && AVAILABLE_PARAMS_NAMES.includes(paramName)) {
       const INDEX = AVAILABLE_PARAMS_NAMES.indexOf(paramName);
       paramValue = DEFAULT_PARAMS_VALUES[INDEX];
-      URL_PARAMS.set(paramName, paramValue);
-      const NEW_URL = `${window.location.origin}${window.location.pathname}?${URL_PARAMS.toString()}`;
-      window.history.replaceState({}, '', NEW_URL.href);
   } else {
       paramValue = validateParam(paramName, paramValue);
-      if (paramValue !== URL_PARAMS.get(paramName)) {
-          URL_PARAMS.set(paramName, paramValue);
-          const NEW_URL = `${window.location.origin}${window.location.pathname}?${URL_PARAMS.toString()}`;
-          window.history.replaceState({}, '', NEW_URL.href);
-      }
   }
 
   return paramValue;
@@ -336,16 +358,16 @@ function validateParam(paramName, paramValue) {
 
   if (INDEX !== -1) {
       switch (paramName) {
-          case 'mode':
+          case 'm':
               if (!['1', '2'].includes(paramValue)) {
                   paramValue = DEFAULT_PARAMS_VALUES[INDEX];
               }
               break;
-          case 'auto':
-          case 'name':
-          case 'response':
-          case 'keyword':
-              if (!['true', 'false'].includes(paramValue)) {
+          case 'a': // 'auto' shortened to 'a'
+          case 'n': // 'name' shortened to 'n'
+          case 'r': // 'response' shortened to 'r'
+          case 'k':
+              if (!['1', '0'].includes(paramValue)) {
                   paramValue = DEFAULT_PARAMS_VALUES[INDEX];
               }
               break;
@@ -451,18 +473,19 @@ function saveFormValues() {
 // This function updates the URL with the selected search params.
 function updateURLWithSearchParams() {
   const URL_PARAMS = {
-      search: searchPhraseValue,
-      auto: autoSearchValue,
-      name: searchPhraseInNpcNameValue,
-      response: searchPhraseInNpcDialogueValue,
-      keyword: searchPhraseInPlayerDialogueValue,
-      mode: searchModeValue,
-      race: searchPhraseByRaceValue,
-      location: searchPhraseByLocationValue,
-      job: searchPhraseByJobValue,
-      version: searchPhraseByVersionValue,
-      info: informations
-  };
+    s: searchPhraseValue,           // 'search' shortened to 's'
+    a: autoSearchValue ? '1' : '0', // 'auto' shortened to 'a' and boolean converted to '1' or '0'
+    n: nameParam ? '1' : '0',       // 'name' shortened to 'n'
+    r: responseParam ? '1' : '0',   // 'response' shortened to 'r'
+    k: keywordParam ? '1' : '0',    // 'keyword' shortened to 'k'
+    m: searchModeValue,             // 'mode' shortened to 'm'
+    rc: searchPhraseByRaceValue,    // 'race' shortened to 'rc'
+    l: searchPhraseByLocationValue, // 'location' shortened to 'l'
+    j: searchPhraseByJobValue,      // 'job' shortened to 'j'
+    v: searchPhraseByVersionValue,  // 'version' shortened to 'v'
+    i: informations,                // 'info' shortened to 'i'
+    t: tabParam                     // 'tab' shortened to 't'
+};
 
   const NEW_URL = new URL(window.location.href);
 
@@ -578,8 +601,8 @@ function searchSpecificObject(keyword) {
       NPC_CONV_ARRAY_DIV_CONTENT = [...NPC_CONVERSATIONS_MAP].map(([npcName, conversations]) => `
           <div class="npcBoxContent">
               <div
-                  onClick="showSpecificObject(\`${npcName}\`); showInformation(\`${npcName}\`);"
-                  style="background-image: url('https://s2ward.github.io/tibia/img/npc/${npcName.replace(/'/g, "\\'")}.png')">
+                onClick="event.stopPropagation(); showSpecificObject(\`${npcName}\`); showInformation(\`${npcName}\`);"
+                style="background-image: url('https://s2ward.github.io/tibia/img/npc/${npcName.replace(/'/g, "\\'")}.png')">
               </div>
               <div>
                   ${conversations.map(conv => `
@@ -604,19 +627,46 @@ function searchSpecificObject(keyword) {
       `).join('') + '</div>';
   }
 
-  mainTab.enterContent(NPC_CONV_ARRAY_DIV_CONTENT);
-  mainTab.setActive();
+    if (shouldActivateResultsTab()) { 
+        mainTab.enterContent(NPC_CONV_ARRAY_DIV_CONTENT);
+        mainTab.setActive();
+    } else {
+        // Otherwise, display the content without setting the tab as active
+        mainTab.enterContent(NPC_CONV_ARRAY_DIV_CONTENT);
+    }
 
   console.timeEnd('search');
 }
+
+function shouldActivateResultsTab() {
+  // Get the 'tab' parameter from the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const specifiedTabName = urlParams.get('t');
+
+  // If the 'tab' parameter is not specified or is 'Results', activate the Results tab
+  if (!specifiedTabName || specifiedTabName === 'Results') {
+      return true;
+  }
+
+  // If the specified tab is an NPC name, do not activate the Results tab
+  return false;
+}
+
 // --- --- --- --- --- --- --- --- ---
 
 // A function that displays the player's dialogues with the NPC based on the name of the npc.
 // eslint-disable-next-line no-unused-vars
 function showSpecificObject(objName) {
-  const FOUND_OBJ = conversationsData.find(obj => obj.name === objName);
 
-  if (FOUND_OBJ) {
+  const FOUND_OBJ = conversationsData.find(obj => obj.name === objName);
+  if (!FOUND_OBJ) {
+      return false;
+  }
+
+  const tabKey = `${objName}-tabContainer_1`; // Unique key for the tab
+  if (Tab.existingTabs.hasOwnProperty(tabKey)) {
+      Tab.existingTabs[tabKey].setActive();
+  } else {
       const OBJ_DIV_CONTENT = `
           <div class="npcBoxContent">
               <div
@@ -633,23 +683,19 @@ function showSpecificObject(objName) {
               </div>
           </div>
       `;
-
-      createNewTab(`${FOUND_OBJ.name.replace(/_/g, ' ')}`, false, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
-  } else {
-      return false;
+      createNewTab(objName.replace(/_/g, ' '), true, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
   }
 }
-// --- --- --- --- --- --- --- --- ---
 
-// --- --- --- --- --- --- --- --- ---
 function createNewTab(name, active, closable, container, mobile, content) {
-  try {
-      newTab = new Tab(name, active, closable, container, mobile, content);
-  } catch (error) {
-      console.error('Error:', error);
+  const KEY = `${name}-${container}`;
+
+  if (!Tab.existingTabs[KEY]) {
+      Tab.existingTabs[KEY] = new Tab(name, active, closable, container, mobile, content);
+  } else {
   }
+  Tab.existingTabs[KEY].setActive();
 }
-// --- --- --- --- --- --- --- --- ---
 
 // A function that displays informations.
 function showInformation(objName) {
@@ -709,14 +755,21 @@ function showInformation(objName) {
       `;
 
       informations = objName;
-      updateURLWithSearchParams();
 
       INFO_DIV.empty().html(INFO_DIV_CONTENT);
       infoTab.enterContent(INFO_DIV_CONTENT);
+      updateURLWithInfoParam(informations); 
   } else {
       return false;
   }
 }
+
+function updateURLWithInfoParam(infoValue) {
+  const url = new URL(window.location);
+  url.searchParams.set('i', infoValue); 
+  window.history.replaceState({}, '', url);
+}
+
 // --- --- --- --- --- --- --- --- ---
 
 $(document).ready(() => {
