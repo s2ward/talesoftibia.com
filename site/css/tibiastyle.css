@@ -80,6 +80,7 @@ body {
   width: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
+  caret-color: transparent;
 }
 
 /* -----------------------------*/
@@ -529,6 +530,7 @@ body {
   line-height: 1.2rem;
   box-shadow: 0.1rem 0.1rem 0 0 rgb(37, 37, 37) inset,
     -0.1rem -0.1rem 0 0 rgb(113, 113, 113) inset;
+  caret-color: #f4f4f4;
 }
 
 .tibiaStyleInputType1::placeholder {
