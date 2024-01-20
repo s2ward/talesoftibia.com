@@ -113,7 +113,9 @@ function updateURLWithCurrentTab(tabName) {
     if (currentTab === tabName.replace(/ /g, '_')) return;  // Prevent unnecessary URL update
 
     const url = new URL(window.location);
-    url.searchParams.set('t', tabName.replace(/ /g, '_'));
+    if (DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf('t')] !== tabName) {
+        url.searchParams.set('t', tabName.replace(/ /g, '_'));
+    }
     window.history.replaceState({}, '', url);
 }
 
@@ -163,6 +165,7 @@ Promise.all([FETCH_CONVERSATIONS, FETCH_NPC_DATA])
 
           const urlParams = new URLSearchParams(window.location.search);
           const specifiedTabName = urlParams.get('t');
+          informations = urlParams.get('i') || '';
 
           if (specifiedTabName) {
               const tabKey = `${specifiedTabName}-tabContainer_1`;
@@ -338,7 +341,7 @@ function getURLParams() {
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'n', 'r', 'k', 'm', 'rc', 'l', 'j', 'v', 'i', 't'];
-const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'i', 'Results'];
+const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', '', 'Results'];
 
 function getQueryParam(paramName) {
   let paramValue = URL_PARAMS.get(paramName);
@@ -490,7 +493,12 @@ function updateURLWithSearchParams() {
   const NEW_URL = new URL(window.location.href);
 
   new URLSearchParams(URL_PARAMS).forEach((value, key) => {
-      NEW_URL.searchParams.set(key, value);
+    if (value == DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf(key)]) {
+        // console.log(`default ${key}`)
+    } else {
+        NEW_URL.searchParams.set(key, value);
+        // console.log(`set ${key} to ${value}`)
+    }
   });
 
   window.history.replaceState({}, '', NEW_URL.href);
