@@ -110,10 +110,21 @@ class Tab {
 
 function updateURLWithCurrentTab(tabName) {
     const currentTab = new URL(window.location.href).searchParams.get('t');
-    if (currentTab === tabName.replace(/ /g, '_')) return;  // Prevent unnecessary URL update
+    
+    // Check if the new tab is the same as the current tab to prevent unnecessary URL update
+    if (currentTab === tabName.replace(/ /g, '_')) return;
 
     const url = new URL(window.location);
-    url.searchParams.set('t', tabName.replace(/ /g, '_'));
+    
+    // If the tab is the default 'Results' tab, remove the 't' parameter from the URL
+    if (tabName === 'Results') {
+        url.searchParams.delete('t');
+    } else {
+        // For other tabs, set the 't' parameter to the tab name
+        url.searchParams.set('t', tabName.replace(/ /g, '_'));
+    }
+
+    // Update the URL
     window.history.replaceState({}, '', url);
 }
 
@@ -163,6 +174,7 @@ Promise.all([FETCH_CONVERSATIONS, FETCH_NPC_DATA])
 
           const urlParams = new URLSearchParams(window.location.search);
           const specifiedTabName = urlParams.get('t');
+          informations = urlParams.get('i') || '';
 
           if (specifiedTabName) {
               const tabKey = `${specifiedTabName}-tabContainer_1`;
@@ -338,7 +350,7 @@ function getURLParams() {
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'n', 'r', 'k', 'm', 'rc', 'l', 'j', 'v', 'i', 't'];
-const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'i', 'Results'];
+const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', '', 'Results'];
 
 function getQueryParam(paramName) {
   let paramValue = URL_PARAMS.get(paramName);
@@ -472,30 +484,40 @@ function saveFormValues() {
 
 // This function updates the URL with the selected search params.
 function updateURLWithSearchParams() {
-  const URL_PARAMS = {
-    s: searchPhraseValue,           // 'search' shortened to 's'
-    a: autoSearchValue ? '1' : '0', // 'auto' shortened to 'a' and boolean converted to '1' or '0'
-    n: nameParam ? '1' : '0',       // 'name' shortened to 'n'
-    r: responseParam ? '1' : '0',   // 'response' shortened to 'r'
-    k: keywordParam ? '1' : '0',    // 'keyword' shortened to 'k'
-    m: searchModeValue,             // 'mode' shortened to 'm'
-    rc: searchPhraseByRaceValue,    // 'race' shortened to 'rc'
-    l: searchPhraseByLocationValue, // 'location' shortened to 'l'
-    j: searchPhraseByJobValue,      // 'job' shortened to 'j'
-    v: searchPhraseByVersionValue,  // 'version' shortened to 'v'
-    i: informations,                // 'info' shortened to 'i'
-    t: tabParam                     // 'tab' shortened to 't'
-};
 
-  const NEW_URL = new URL(window.location.href);
+    const URL_PARAMS = {
+        s: searchPhraseValue,           // 'search' shortened to 's'
+        a: autoSearchValue ? '1' : '0', // 'auto' shortened to 'a' and boolean converted to '1' or '0'
+        n: nameParam ? '1' : '0',       // 'name' shortened to 'n'
+        r: responseParam ? '1' : '0',   // 'response' shortened to 'r'
+        k: keywordParam ? '1' : '0',    // 'keyword' shortened to 'k'
+        m: String(searchModeValue),     // 'mode' shortened to 'm', ensure it's a string
+        rc: searchPhraseByRaceValue,    // 'race' shortened to 'rc'
+        l: searchPhraseByLocationValue, // 'location' shortened to 'l'
+        j: searchPhraseByJobValue,      // 'job' shortened to 'j'
+        v: searchPhraseByVersionValue,  // 'version' shortened to 'v'
+        i: informations,                // 'info' shortened to 'i'
+        t: tabParam                     // 'tab' shortened to 't'
+    };
 
-  new URLSearchParams(URL_PARAMS).forEach((value, key) => {
-      NEW_URL.searchParams.set(key, value);
-  });
+    const NEW_URL = new URL(window.location.href);
 
-  window.history.replaceState({}, '', NEW_URL.href);
+    AVAILABLE_PARAMS_NAMES.forEach((paramName, index) => {
+        const paramValue = URL_PARAMS[paramName];
+        const defaultValue = DEFAULT_PARAMS_VALUES[index];
 
-  return Promise.resolve();
+        // If the param is not in the URL_PARAMS or its value is default, 'All', or empty, remove it.
+        if (!URL_PARAMS.hasOwnProperty(paramName) || paramValue === defaultValue || paramValue === 'All' || paramValue === 'Results' || paramValue === '') {
+            NEW_URL.searchParams.delete(paramName);
+        } else {
+            // If the param value is not default, set or update it.
+            NEW_URL.searchParams.set(paramName, paramValue);
+        }
+    });
+
+    // Apply the modified search parameters to the URL
+    window.history.replaceState({}, '', NEW_URL.href);
+    console.log(`New URL: ${NEW_URL.href}`);
 }
 // --- --- --- --- --- --- --- --- ---
 
