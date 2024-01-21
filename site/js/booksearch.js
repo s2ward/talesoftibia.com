@@ -103,14 +103,22 @@ class Tab {
 }
 
 function updateURLWithCurrentTab(tabName) {
-  const currentTab = new URL(window.location.href).searchParams.get('t');
-  if (currentTab === tabName.replace(/ /g, '_')) return;  // Prevent unnecessary URL update
+    const currentTab = new URL(window.location.href).searchParams.get('t');
+    
+    // Check if the new tab is the same as the current tab to prevent unnecessary URL update
+    if (currentTab === tabName.replace(/ /g, '_')) return;
 
-  const url = new URL(window.location);
-  if (DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf('t')] !== tabName) {
-    url.searchParams.set('t', tabName.replace(/ /g, '_'));
-  }
-  window.history.replaceState({}, '', url);
+    const url = new URL(window.location);
+    
+    // If the tab is the default 'Results' tab, remove the 't' parameter from the URL
+    if (tabName === 'Results') {
+        url.searchParams.delete('t');
+    } else {
+        // For other tabs, set the 't' parameter to the tab name
+        url.searchParams.set('t', tabName.replace(/ /g, '_'));
+    }
+
+    window.history.replaceState({}, '', url);
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -473,7 +481,7 @@ function updateURLWithSearchParams() {
     b: searchPhraseInBooksValue ? '1' : '0',   
     c: searchPhraseInCreaturesValue ? '1' : '0',  
     ac: searchPhraseInAchievementsValue ? '1' : '0',   
-    m: searchModeValue,             
+    m: String(searchModeValue),             
     n: filterResultsByNameValue,    
     l: filterResultsByLocationValue, 
     ar: filterResultsByAuthorValue,     
@@ -482,20 +490,23 @@ function updateURLWithSearchParams() {
     t: tabParam                    
 };
 
-  const NEW_URL = new URL(window.location.href);
+    const NEW_URL = new URL(window.location.href);
 
-  new URLSearchParams(URL_PARAMS).forEach((value, key) => {
-    if (value == DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf(key)]) {
-        // console.log(`default ${key}`)
-      } else {
-        NEW_URL.searchParams.set(key, value);
-        // console.log(`set ${key} to ${value}`)
-      }
-  });
+    AVAILABLE_PARAMS_NAMES.forEach((paramName, index) => {
+        const paramValue = URL_PARAMS[paramName];
+        const defaultValue = DEFAULT_PARAMS_VALUES[index];
 
-  window.history.replaceState({}, '', NEW_URL.href);
+    // If the param is not in the URL_PARAMS or its value is default, 'All', or empty, remove it.
+        if (!URL_PARAMS.hasOwnProperty(paramName) || paramValue === defaultValue || paramValue === 'All' || paramValue === 'Results' || paramValue === '') {
+            NEW_URL.searchParams.delete(paramName);
+        } else {
+            // If the param value is not default, set or update it.
+            NEW_URL.searchParams.set(paramName, paramValue);
+        }
+    });
 
-  return Promise.resolve();
+    // Apply the modified search parameters to the URL
+    window.history.replaceState({}, '', NEW_URL.href);
 }
 
 // --- --- --- --- --- --- --- --- ---
