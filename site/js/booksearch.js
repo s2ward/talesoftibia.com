@@ -88,7 +88,9 @@ class Tab {
         this.active = true;
         this.tabElement.addClass('active');
         this.tabContentElement.addClass('active');
-        updateURLWithCurrentTab(this.name);
+
+        tabParam = this.name.replace(/ /g, '_');
+        updateURLWithSearchParams();
     }
 
     setInactive() {
@@ -102,25 +104,6 @@ class Tab {
     }
 }
 
-function updateURLWithCurrentTab(tabName) {
-    const currentTab = new URL(window.location.href).searchParams.get('t');
-    
-    // Check if the new tab is the same as the current tab to prevent unnecessary URL update
-    if (currentTab === tabName.replace(/ /g, '_')) return;
-
-    const url = new URL(window.location);
-    
-    // If the tab is the default 'Results' tab, remove the 't' parameter from the URL
-    if (tabName === 'Results') {
-        url.searchParams.delete('t');
-    } else {
-        // For other tabs, set the 't' parameter to the tab name
-        url.searchParams.set('t', tabName.replace(/ /g, '_'));
-    }
-
-    window.history.replaceState({}, '', url);
-}
-
 // --- --- --- --- --- --- --- --- ---
 
 // Creating the main tab of the window and references to it.
@@ -132,7 +115,7 @@ let infoTab = null;
 let booksData = [];
 let imgData = [];
 const mergeData = [];
-let infoTabInstance = new Tab('Info', false, false, 'tabContainer_1', true);
+//let infoTabInstance = new Tab('Info', false, false, 'tabContainer_1', true);
 
 function handleFetchError(error) {
     console.error('Error:', error);
@@ -163,32 +146,28 @@ Promise.all([FETCH_BOOKS, FETCH_IMG])
 
         // Initialize tabs after data is loaded
       $(document).ready(() => {
+        const bookInfoContent = $('#npc-info').html();
         let resultsTab = new Tab('Results', false, false, 'tabContainer_1', false);
-        
+        let infoTabInstance = new Tab('Info', false, false, 'tabContainer_1', true, bookInfoContent);
 
-        mainTab = resultsTab; // Assign to global variable
-        infoTab = infoTabInstance; // Assign to global variable
+        mainTab = resultsTab;
+        infoTab = infoTabInstance;
 
         const urlParams = new URLSearchParams(window.location.search);
         const specifiedTabName = urlParams.get('t');
-        informations = urlParams.get('i') || '';
+        const tabKey = `${specifiedTabName}-tabContainer_1`;
 
-        if (informations) {
-          showInformation(informations);
-        }
-
-        if (specifiedTabName) {
-            const tabKey = `${specifiedTabName}-tabContainer_1`;
-            if (Tab.existingTabs.hasOwnProperty(tabKey)) {
-                // Activate existing tab if found
-                Tab.existingTabs[tabKey].setActive();
-            } else {
-                // If not found, create and activate a new tab
-                showSpecificObject(specifiedTabName);
-            }
+        if (Tab.existingTabs.hasOwnProperty(tabKey)) {
+            // Activate existing tab if found
+            Tab.existingTabs[tabKey].setActive();
         } else {
-            // If no specific tab is specified, activate the Results tab
-            resultsTab.setActive();
+            // Create and activate a new tab or the default Results tab
+            specifiedTabName === 'Results' ? mainTab.setActive() : showSpecificObject(specifiedTabName);
+        }
+    
+        // Show information about the NPC taken from tab name
+        if (specifiedTabName !== 'Results') {
+            showInformation(specifiedTabName);
         }
 
         setUpFormListeners()
@@ -219,7 +198,7 @@ let filterResultsByLocationInput = null;
 let filterResultsByAuthorInput = null;
 let filterResultsByVersionInput = null;
 // ---
-let informations = null;
+//let InfoParam = null;
 
 function setUpFormListeners() {
     resultFilterOptionsForm = document.forms.searchOptionsForm;
@@ -271,7 +250,7 @@ function setUpFormListeners() {
     let timer;
     searchPhraseInput.addEventListener('input', () => {
         clearTimeout(timer);
-        timer = setTimeout(handleInputDebounced, 0);
+        timer = setTimeout(handleInputDebounced, 50);
     });
 
     return Promise.resolve();
@@ -342,19 +321,29 @@ function getURLParams() {
     locationParam = String(getQueryParam('l'));
     authorParam = String(getQueryParam('ar'));
     versionParam = String(getQueryParam('v'));
-    infoParam = String(getQueryParam('i')); // 'info' is used as a shortcut for 'info'
+    //infoParam = String(getQueryParam('i'));
     tabParam = String(getQueryParam('t'));
 
     return Promise.resolve();
 }
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
-const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'b', 'c', 'ac', 'm', 'n', 'l', 'ar', 'v', 'i', 't'];
-const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', '', 'Results'];
+//const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'b', 'c', 'ac', 'm', 'n', 'l', 'ar', 'v', 'i', 't'];
+//const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'i', 'Results'];
+const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'b', 'c', 'ac', 'm', 'n', 'l', 'ar', 'v', 't'];
+const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'Results'];
 
 function getQueryParam(paramName) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(paramName) || DEFAULT_PARAMS_VALUES[AVAILABLE_PARAMS_NAMES.indexOf(paramName)];
+  let paramValue = URL_PARAMS.get(paramName);
+
+  if (paramValue === null && AVAILABLE_PARAMS_NAMES.includes(paramName)) {
+      const INDEX = AVAILABLE_PARAMS_NAMES.indexOf(paramName);
+      paramValue = DEFAULT_PARAMS_VALUES[INDEX];
+  } else {
+      paramValue = validateParam(paramName, paramValue);
+  }
+
+  return paramValue;
 }
 
 function validateParam(paramName, paramValue) {
@@ -481,32 +470,33 @@ function updateURLWithSearchParams() {
     b: searchPhraseInBooksValue ? '1' : '0',   
     c: searchPhraseInCreaturesValue ? '1' : '0',  
     ac: searchPhraseInAchievementsValue ? '1' : '0',   
-    m: String(searchModeValue),             
+    m: searchModeValue,             
     n: filterResultsByNameValue,    
     l: filterResultsByLocationValue, 
     ar: filterResultsByAuthorValue,     
     v: filterResultsByVersionValue, 
-    i: informations,               
+    //i: InfoParam,               
     t: tabParam                    
 };
 
-    const NEW_URL = new URL(window.location.href);
+  const NEW_URL = new URL(window.location.href);
 
-    AVAILABLE_PARAMS_NAMES.forEach((paramName, index) => {
-        const paramValue = URL_PARAMS[paramName];
-        const defaultValue = DEFAULT_PARAMS_VALUES[index];
+  Object.keys(URL_PARAMS).forEach(paramName => {
+    const paramValue = String(URL_PARAMS[paramName]);
+    const defaultValue = String(DEFAULT_PARAMS_VALUES[paramName] || '');
 
-    // If the param is not in the URL_PARAMS or its value is default, 'All', or empty, remove it.
-        if (!URL_PARAMS.hasOwnProperty(paramName) || paramValue === defaultValue || paramValue === 'All' || paramValue === 'Results' || paramValue === '') {
-            NEW_URL.searchParams.delete(paramName);
-        } else {
-            // If the param value is not default, set or update it.
-            NEW_URL.searchParams.set(paramName, paramValue);
-        }
-    });
+    // If the param is not in the URL_PARAMS or its value is default, remove it.
+    if (!paramValue || paramValue === defaultValue || paramValue === 'All' || paramValue === 'Results' || paramValue === '1' || paramValue === 'null' || paramValue === 'Info') {
+        NEW_URL.searchParams.delete(paramName);
+    } else {
+        // If the param value is not default, set or update it.
+        NEW_URL.searchParams.set(paramName, paramValue);
+    }
+  });
 
-    // Apply the modified search parameters to the URL
-    window.history.replaceState({}, '', NEW_URL.href);
+  window.history.replaceState({}, '', NEW_URL.href);
+
+  return Promise.resolve();
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -594,93 +584,69 @@ function searchSpecificObject(keyword) {
         `).join('') + '</div>';
     }
 
-    if (shouldActivateResultsTab()) { 
-        mainTab.enterContent(BOOK_TEXTS_ARRAY_DIV_CONTENT);
-        mainTab.setActive();
-    } else {
-        // Otherwise, display the content without setting the tab as active
-        mainTab.enterContent(BOOK_TEXTS_ARRAY_DIV_CONTENT);
+    mainTab.enterContent(BOOK_TEXTS_ARRAY_DIV_CONTENT);
+
+    // Get the tab parameter from the URL directly here
+    const urlParams = new URLSearchParams(window.location.search);
+    const specifiedTabName = urlParams.get('t');
+
+    // Activate the Results tab if the 'tab' parameter is not specified or is 'Results'
+    if (!specifiedTabName || specifiedTabName === 'Results') {
+      mainTab.setActive();
     }
 
     console.timeEnd('search');
-}
-
-function shouldActivateResultsTab() {
-  // Get the 'tab' parameter from the URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const specifiedTabName = urlParams.get('t');
-
-  // If the 'tab' parameter is not specified or is 'Results', activate the Results tab
-  if (!specifiedTabName || specifiedTabName === 'Results') {
-      return true;
-  }
-  return false;
 }
 
 // --- --- --- --- --- --- --- --- ---
 
 // A function that displays the player's dialogues with the NPC based on the name of the npc.
 // eslint-disable-next-line no-unused-vars
-function showSpecificObject(objName, closable) {
-    const FOUND_OBJ = booksData.find(obj => obj.name === objName);
-    if (!FOUND_OBJ) {
+function showSpecificObject(objName) {
+  const FOUND_OBJ = booksData.find(obj => obj.name === objName);
+  if (!FOUND_OBJ) {
       return false;
-    } 
-
-    if (FOUND_OBJ) {
-        const OBJ_DIV_CONTENT = `
-            <div style="width: 29.75rem; margin: auto; display: block;" class="bookBoxContent tibiaStyleBorderHigh2">
-                <div class="flexRow bookHeader" onClick="showInformation(\`${FOUND_OBJ.name}\`);">
-                    <div
-                        class="bookImage"
-                        style="background-image: url('https://s2ward.github.io/tibia/img/${FOUND_OBJ.type}/${FOUND_OBJ.img[0].replace(/ /g, '_').replace(/'/g, "\\'")}.png')">
-                    </div>
-                    <div class="bookName fullWidth rightSpace10P tibiaStyleTextLight">${FOUND_OBJ.name.replace(/_/g, ' ')}</div>
-                </div>
-
-                <div>
-                    <div class="bookText tibiaStyleBorderDeep1 spaceAround5P leftSpace10M rightSpace10M bottomSpace10M tibiaStyleTextLight">${FOUND_OBJ.text.toString().replace(/\n/g, '<br/><br/>')}</div>
-                </div>
-                ${FOUND_OBJ['previous-book'] !== '_NOPREV' || FOUND_OBJ['next-book'] !== '_NONEXT'
-                ? `<div class="horizontalBar topSpace10M bottomSpace10M leftSpace10M rightSpace10M"></div>
-                
-                    <div class="flexRow topSpace10M bottomSpace10M leftSpace10M rightSpace10M">
-                        <a 
-                            onClick="showSpecificObject('${FOUND_OBJ['previous-book'].replace(/'/g, "\\'")}', true);"
-                            class="tibiaStyleButtonType1 fullWidth rightSpace5M">
-                            ${FOUND_OBJ['previous-book'] !== '_NOPREV' ? '⮜ PREV' : '⬤'}
-                        </a>
-                        <a 
-                            onClick="showSpecificObject('${FOUND_OBJ['next-book'].replace(/'/g, "\\'")}', true);"
-                            class="tibiaStyleButtonType1 fullWidth leftSpace5M">
-                            ${FOUND_OBJ['next-book'] !== '_NONEXT' ? 'NEXT ⮞' : '⬤'}
-                        </a>
-                    </div>`
-                : ''
-            }
-            </div>
-        `;
-
-        createNewTab(`${FOUND_OBJ.name.replace(/_/g, ' ')}`, true, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
-    } else {
-        return false;
-    }
-}
-// --- --- --- --- --- --- --- --- ---
-
-// --- --- --- --- --- --- --- --- ---
-function createNewTab(name, active, closable, container, mobile, content) {
-  const KEY = `${name}-${container}`;
-
-  if (!Tab.existingTabs[KEY]) {
-      Tab.existingTabs[KEY] = new Tab(name, active, closable, container, mobile, content);
-  } else {
   }
-  Tab.existingTabs[KEY].setActive();
+
+  const tabKey = `${objName}-tabContainer_1`; // Unique key for the tab
+  const OBJ_DIV_CONTENT = `
+      <div style="width: 29.75rem; margin: auto; display: block;" class="bookBoxContent tibiaStyleBorderHigh2">
+          <div class="flexRow bookHeader" onClick="showInformation(\`${FOUND_OBJ.name}\`);">
+              <div
+                  class="bookImage"
+                  style="background-image: url('https://s2ward.github.io/tibia/img/${FOUND_OBJ.type}/${FOUND_OBJ.img[0].replace(/ /g, '_').replace(/'/g, "\\'")}.png')">
+              </div>
+              <div class="bookName fullWidth rightSpace10P tibiaStyleTextLight">${FOUND_OBJ.name.replace(/_/g, ' ')}</div>
+          </div>
+
+          <div>
+              <div class="bookText tibiaStyleBorderDeep1 spaceAround5P leftSpace10M rightSpace10M bottomSpace10M tibiaStyleTextLight">${FOUND_OBJ.text.toString().replace(/\n/g, '<br/><br/>')}</div>
+          </div>
+          ${FOUND_OBJ['previous-book'] !== '_NOPREV' || FOUND_OBJ['next-book'] !== '_NONEXT'
+              ? `<div class="horizontalBar topSpace10M bottomSpace10M leftSpace10M rightSpace10M"></div>
+                  <div class="flexRow topSpace10M bottomSpace10M leftSpace10M rightSpace10M">
+                      <a onClick="showSpecificObject('${FOUND_OBJ['previous-book'].replace(/'/g, "\\'")}', true);" class="tibiaStyleButtonType1 fullWidth rightSpace5M">
+                          ${FOUND_OBJ['previous-book'] !== '_NOPREV' ? '← Previous' : '•'}
+                      </a>
+                      <a onClick="showSpecificObject('${FOUND_OBJ['next-book'].replace(/'/g, "\\'")}', true);" class="tibiaStyleButtonType1 fullWidth leftSpace5M">
+                          ${FOUND_OBJ['next-book'] !== '_NONEXT' ? 'Next →' : '•'}
+                      </a>
+                  </div>`
+              : ''
+          }
+      </div>
+  `;
+
+  
+  if (!Tab.existingTabs[tabKey]) {
+      Tab.existingTabs[tabKey] = new Tab(objName.replace(/_/g, ' '), true, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
+  }
+  Tab.existingTabs[tabKey].setActive();
 }
+
 // --- --- --- --- --- --- --- --- ---
 
-// A function that displays informations.
+// A function that displays InfoParam.
 function showInformation(objName) {
     const INFO_DIV = $('#npc-info');
     const FOUND_OBJ = booksData.find(obj => obj.name === objName);
@@ -740,20 +706,15 @@ function showInformation(objName) {
                 : ''}
         `;
 
-        informations = objName;
+        infoParam = objName;
+        updateURLWithSearchParams();
         
         INFO_DIV.empty().html(INFO_DIV_CONTENT);
         infoTab.enterContent(INFO_DIV_CONTENT);
-        updateURLWithInfoParam(informations);
+
     } else {
         return false;
     }
-}
-
-function updateURLWithInfoParam(infoValue) {
-  const url = new URL(window.location);
-  url.searchParams.set('i', infoValue); // Set only the 'info' parameter
-  window.history.replaceState({}, '', url);
 }
 
 // --- --- --- --- --- --- --- --- ---

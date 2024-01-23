@@ -94,7 +94,9 @@ class Tab {
       this.active = true;
       this.tabElement.addClass('active');
       this.tabContentElement.addClass('active');
-      updateURLWithCurrentTab(this.name);
+
+      tabParam = this.name.replace(/ /g, '_');
+      updateURLWithSearchParams();
   }
 
   setInactive() {
@@ -106,26 +108,6 @@ class Tab {
               tab.active = false;
           });
   }
-}
-
-function updateURLWithCurrentTab(tabName) {
-    const currentTab = new URL(window.location.href).searchParams.get('t');
-    
-    // Check if the new tab is the same as the current tab to prevent unnecessary URL update
-    if (currentTab === tabName.replace(/ /g, '_')) return;
-
-    const url = new URL(window.location);
-    
-    // If the tab is the default 'Results' tab, remove the 't' parameter from the URL
-    if (tabName === 'Results') {
-        url.searchParams.delete('t');
-    } else {
-        // For other tabs, set the 't' parameter to the tab name
-        url.searchParams.set('t', tabName.replace(/ /g, '_'));
-    }
-
-    // Update the URL
-    window.history.replaceState({}, '', url);
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -166,28 +148,28 @@ Promise.all([FETCH_CONVERSATIONS, FETCH_NPC_DATA])
 
       // Initialize tabs after data is loaded
       $(document).ready(() => {
+          const npcInfoContent = $('#npc-info').html();
           let resultsTab = new Tab('Results', false, false, 'tabContainer_1', false);
-          let infoTabInstance = new Tab('i', false, false, 'tabContainer_1', true);
+          let infoTabInstance = new Tab('Info', false, false, 'tabContainer_1', true, npcInfoContent);
 
-          mainTab = resultsTab; // Assign to global variable
-          infoTab = infoTabInstance; // Assign to global variable
+          mainTab = resultsTab; 
+          infoTab = infoTabInstance; 
 
           const urlParams = new URLSearchParams(window.location.search);
           const specifiedTabName = urlParams.get('t');
-          informations = urlParams.get('i') || '';
+          const tabKey = `${specifiedTabName}-tabContainer_1`;
 
-          if (specifiedTabName) {
-              const tabKey = `${specifiedTabName}-tabContainer_1`;
-              if (Tab.existingTabs.hasOwnProperty(tabKey)) {
-                  // Activate existing tab if found
-                  Tab.existingTabs[tabKey].setActive();
-              } else {
-                  // If not found, create and activate a new tab
-                  showSpecificObject(specifiedTabName);
-              }
+          if (Tab.existingTabs.hasOwnProperty(tabKey)) {
+              // Activate existing tab if found
+              Tab.existingTabs[tabKey].setActive();
           } else {
-              // If no specific tab is specified, activate the Results tab
-              resultsTab.setActive();
+              // Create and activate a new tab or the default Results tab
+              specifiedTabName === 'Results' ? mainTab.setActive() : showSpecificObject(specifiedTabName);
+          }
+      
+          // Show information about the NPC taken from tab name
+          if (specifiedTabName !== 'Results') {
+              showInformation(specifiedTabName);
           }
 
           setUpFormListeners()
@@ -218,7 +200,7 @@ let searchPhraseByLocationInput = null;
 let searchPhraseByJobInput = null;
 let searchPhraseByVersionInput = null;
 // ---
-let informations = null;
+//let infoParam = null;
 
 function setUpFormListeners() {
   resultFilterOptionsForm = document.forms.searchOptionsForm;
@@ -341,7 +323,7 @@ function getURLParams() {
   locationParam = String(getQueryParam('l'));
   jobParam = String(getQueryParam('j'));
   versionParam = String(getQueryParam('v'));
-  infoParam = String(getQueryParam('i'));
+  //infoParam = String(getQueryParam('i'));
   tabParam = String(getQueryParam('t'));
 
   return Promise.resolve();
@@ -349,8 +331,10 @@ function getURLParams() {
 
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
-const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'n', 'r', 'k', 'm', 'rc', 'l', 'j', 'v', 'i', 't'];
-const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', '', 'Results'];
+const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'n', 'r', 'k', 'm', 'rc', 'l', 'j', 'v', 't'];
+const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', 'Results'];
+//const AVAILABLE_PARAMS_NAMES = ['s', 'a', 'n', 'r', 'k', 'm', 'rc', 'l', 'j', 'v', 'i', 't'];
+//const DEFAULT_PARAMS_VALUES = ['', '1', '1', '1', '1', '1', 'All', 'All', 'All', 'All', '', 'Results'];
 
 function getQueryParam(paramName) {
   let paramValue = URL_PARAMS.get(paramName);
@@ -378,7 +362,7 @@ function validateParam(paramName, paramValue) {
           case 'a': // 'auto' shortened to 'a'
           case 'n': // 'name' shortened to 'n'
           case 'r': // 'response' shortened to 'r'
-          case 'k':
+          case 'k': // 'keyword' shortened to 'k'
               if (!['1', '0'].includes(paramValue)) {
                   paramValue = DEFAULT_PARAMS_VALUES[INDEX];
               }
@@ -439,7 +423,7 @@ function setFormSettings() {
   if (infoParam !== '') {
       showInformation(infoParam);
   }
-
+  
   return Promise.resolve();
 }
 // --- --- --- --- --- --- --- --- ---
@@ -462,6 +446,7 @@ function saveFormValues() {
   searchPhraseInNpcNameValue = Boolean(searchPhraseInNpcNameInput.checked);
   searchPhraseInNpcDialogueValue = Boolean(searchPhraseInNpcDialogueInput.checked);
   searchPhraseInPlayerDialogueValue = Boolean(searchPhraseInPlayerDialogueInput.checked);
+
   searchModeInput.forEach(radio => {
       if (radio.checked) {
           searchModeValue = Number(radio.value);
@@ -484,40 +469,39 @@ function saveFormValues() {
 
 // This function updates the URL with the selected search params.
 function updateURLWithSearchParams() {
+  const URL_PARAMS = {
+    s: searchPhraseValue,           // 'search' shortened to 's'
+    a: autoSearchValue ? '1' : '0', // 'auto' shortened to 'a' and boolean converted to '1' or '0'
+    n: searchPhraseInNpcNameValue ? '1' : '0',       // 'name' parameter
+    r: searchPhraseInNpcDialogueValue ? '1' : '0',   // 'response' parameter
+    k: searchPhraseInPlayerDialogueValue ? '1' : '0',    // 'keyword' parameter
+    m: searchModeValue,             // 'mode' shortened to 'm'
+    rc: searchPhraseByRaceValue,    // 'race' shortened to 'rc'
+    l: searchPhraseByLocationValue, // 'location' shortened to 'l'
+    j: searchPhraseByJobValue,      // 'job' shortened to 'j'
+    v: searchPhraseByVersionValue,  // 'version' shortened to 'v'
+    //i: infoParam,                   // 'info' shortened to 'i'
+    t: tabParam                     // 'tab' shortened to 't'
+  };
 
-    const URL_PARAMS = {
-        s: searchPhraseValue,           // 'search' shortened to 's'
-        a: autoSearchValue ? '1' : '0', // 'auto' shortened to 'a' and boolean converted to '1' or '0'
-        n: nameParam ? '1' : '0',       // 'name' shortened to 'n'
-        r: responseParam ? '1' : '0',   // 'response' shortened to 'r'
-        k: keywordParam ? '1' : '0',    // 'keyword' shortened to 'k'
-        m: String(searchModeValue),     // 'mode' shortened to 'm', ensure it's a string
-        rc: searchPhraseByRaceValue,    // 'race' shortened to 'rc'
-        l: searchPhraseByLocationValue, // 'location' shortened to 'l'
-        j: searchPhraseByJobValue,      // 'job' shortened to 'j'
-        v: searchPhraseByVersionValue,  // 'version' shortened to 'v'
-        i: informations,                // 'info' shortened to 'i'
-        t: tabParam                     // 'tab' shortened to 't'
-    };
+  const NEW_URL = new URL(window.location.href);
 
-    const NEW_URL = new URL(window.location.href);
+  Object.keys(URL_PARAMS).forEach(paramName => {
+    const paramValue = String(URL_PARAMS[paramName]);
+    const defaultValue = String(DEFAULT_PARAMS_VALUES[paramName] || '');
 
-    AVAILABLE_PARAMS_NAMES.forEach((paramName, index) => {
-        const paramValue = URL_PARAMS[paramName];
-        const defaultValue = DEFAULT_PARAMS_VALUES[index];
+    // If the param is not in the URL_PARAMS or its value is default, remove it.
+    if (!paramValue || paramValue === defaultValue || paramValue === 'All' || paramValue === 'Results' || paramValue === '1' || paramValue === 'null' || paramValue === 'Info') {
+        NEW_URL.searchParams.delete(paramName);
+    } else {
+        // If the param value is not default, set or update it.
+        NEW_URL.searchParams.set(paramName, paramValue);
+    }
+  });
 
-        // If the param is not in the URL_PARAMS or its value is default, 'All', or empty, remove it.
-        if (!URL_PARAMS.hasOwnProperty(paramName) || paramValue === defaultValue || paramValue === 'All' || paramValue === 'Results' || paramValue === '') {
-            NEW_URL.searchParams.delete(paramName);
-        } else {
-            // If the param value is not default, set or update it.
-            NEW_URL.searchParams.set(paramName, paramValue);
-        }
-    });
+  window.history.replaceState({}, '', NEW_URL.href);
 
-    // Apply the modified search parameters to the URL
-    window.history.replaceState({}, '', NEW_URL.href);
-    console.log(`New URL: ${NEW_URL.href}`);
+  return Promise.resolve();
 }
 // --- --- --- --- --- --- --- --- ---
 
@@ -649,29 +633,18 @@ function searchSpecificObject(keyword) {
       `).join('') + '</div>';
   }
 
-    if (shouldActivateResultsTab()) { 
-        mainTab.enterContent(NPC_CONV_ARRAY_DIV_CONTENT);
-        mainTab.setActive();
-    } else {
-        // Otherwise, display the content without setting the tab as active
-        mainTab.enterContent(NPC_CONV_ARRAY_DIV_CONTENT);
-    }
+  mainTab.enterContent(NPC_CONV_ARRAY_DIV_CONTENT);
 
-  console.timeEnd('search');
-}
-
-function shouldActivateResultsTab() {
-  // Get the 'tab' parameter from the URL
+  // Get the 'tab' parameter from the URL directly here
   const urlParams = new URLSearchParams(window.location.search);
   const specifiedTabName = urlParams.get('t');
 
-  // If the 'tab' parameter is not specified or is 'Results', activate the Results tab
+  // Activate the Results tab if the 'tab' parameter is not specified or is 'Results'
   if (!specifiedTabName || specifiedTabName === 'Results') {
-      return true;
+      mainTab.setActive();
   }
 
-  // If the specified tab is an NPC name, do not activate the Results tab
-  return false;
+  console.timeEnd('search');
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -686,40 +659,34 @@ function showSpecificObject(objName) {
   }
 
   const tabKey = `${objName}-tabContainer_1`; // Unique key for the tab
-  if (Tab.existingTabs.hasOwnProperty(tabKey)) {
+  if (!Tab.existingTabs.hasOwnProperty(tabKey)) {
+    // Check if the tab exists, if not create a new one, otherwise activate it
+    const OBJ_DIV_CONTENT = `
+        <div class="npcBoxContent">
+            <div
+                onClick="showInformation(\`${FOUND_OBJ.name}\`);"
+                style="background-image: url('https://s2ward.github.io/tibia/img/npc/${FOUND_OBJ.name.replace(/'/g, "\\'")}.png')">
+            </div>
+            <div>
+                ${FOUND_OBJ.conversation.map(conv => `
+                    <a>Player: ${conv.prompt}</a>
+                    ${conv.answer.map(ans => `
+                        <p>${FOUND_OBJ.name.replace(/_/g, ' ')}: ${ans.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}</p>
+                    `).join('')}
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    Tab.existingTabs[tabKey] = new Tab(objName.replace(/_/g, ' '), true, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
+
+  } else {
       Tab.existingTabs[tabKey].setActive();
-  } else {
-      const OBJ_DIV_CONTENT = `
-          <div class="npcBoxContent">
-              <div
-                  onClick="showInformation(\`${FOUND_OBJ.name}\`);"
-                  style="background-image: url('https://s2ward.github.io/tibia/img/npc/${FOUND_OBJ.name.replace(/'/g, "\\'")}.png')">
-              </div>
-              <div>
-                  ${FOUND_OBJ.conversation.map(conv => `
-                      <a>Player: ${conv.prompt}</a>
-                      ${conv.answer.map(ans => `
-                          <p>${FOUND_OBJ.name.replace(/_/g, ' ')}: ${ans.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}</p>
-                      `).join('')}
-                  `).join('')}
-              </div>
-          </div>
-      `;
-      createNewTab(objName.replace(/_/g, ' '), true, true, 'tabContainer_1', false, OBJ_DIV_CONTENT);
   }
 }
 
-function createNewTab(name, active, closable, container, mobile, content) {
-  const KEY = `${name}-${container}`;
 
-  if (!Tab.existingTabs[KEY]) {
-      Tab.existingTabs[KEY] = new Tab(name, active, closable, container, mobile, content);
-  } else {
-  }
-  Tab.existingTabs[KEY].setActive();
-}
-
-// A function that displays informations.
+// A function that displays infoParam.
 function showInformation(objName) {
   const INFO_DIV = $('#npc-info');
   const FOUND_OBJ = npcData.find(obj => obj.name === objName);
@@ -775,21 +742,15 @@ function showInformation(objName) {
               `
               : ''}
       `;
-
-      informations = objName;
+      infoParam = objName;
+      updateURLWithSearchParams();
 
       INFO_DIV.empty().html(INFO_DIV_CONTENT);
       infoTab.enterContent(INFO_DIV_CONTENT);
-      updateURLWithInfoParam(informations); 
+
   } else {
       return false;
   }
-}
-
-function updateURLWithInfoParam(infoValue) {
-  const url = new URL(window.location);
-  url.searchParams.set('i', infoValue); 
-  window.history.replaceState({}, '', url);
 }
 
 // --- --- --- --- --- --- --- --- ---
@@ -799,14 +760,14 @@ $(document).ready(() => {
   const toggleButtonElement = $('#options-button');
 
   const handleWindowResize = () => {
-      if ($(window).width() > 900) {
-          searchOptionsElement.css({
-              display: ''
-          });
-          if (infoTab.active === true) {
-              mainTab.setActive();
-          }
-      }
+    if ($(window).width() > 900) {
+        searchOptionsElement.css({
+            display: ''
+        });
+        if (infoTab.active === true) {
+            mainTab.setActive();
+        }
+    }
   };
 
   const handleToggleButton = () => {
